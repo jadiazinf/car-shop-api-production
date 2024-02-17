@@ -1,0 +1,64 @@
+require: rubocop-rails
+
+AllCops:
+  NewCops: enable
+  Exclude:
+    # Auto-generated files
+    - 'bin/*'
+    - 'db/schema.rb'
+
+    # Temp files
+    - 'tmp/**/*'
+
+    # vendor dir is used by most CI services
+    - 'vendor/**/*'
+
+  TargetRubyVersion: 3.1.2
+
+Layout/LineLength:
+  Max: 100
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Metrics/AbcSize:
+  Exclude:
+    - config/routes/*.rb # Routes
+
+Metrics/MethodLength:
+  Exclude:
+    - config/routes/*.rb # Routes
+    - db/migrate/*.rb # Migrations
+
+Metrics/BlockLength:
+  Exclude:
+    - config/routes/*.rb # Routes
+    - config/routes.rb   # Routes
+    - lib/tasks/*/*
+  AllowedMethods:
+    - configure # Configurations
+    - context   # Specs
+    - describe  # Specs
+    - namespace # Tasks
+    - task      # Tasks
+    - included  # Model and controller concerns
+    - setup     # Devise
+
+Metrics/ModuleLength:
+  Exclude:
+    - config/routes/*.rb # Routes
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+
+Style/Documentation:
+    Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/RegexpLiteral:
+  EnforcedStyle: mixed
