@@ -1,0 +1,15 @@
+es:
+  active_record:
+    locations:
+      attributes:
+        location_type:
+          city: "Ciudad"
+          state: "Estado"
+          town: "Municipio"
+      errors:
+        invalid_location_type: '%{value} no es un tipo de ubicación válido'
+        name_required: "Nombre de la ubicación es requerido"
+        parent_location_id_required: "El id de la ubicación es requerido"
+        parent_location_id_is_not_a_country: "El id de la ubicación no pertenece a un país"
+        parent_location_id_is_not_a_state: "El id de la ubicación no pertenece a un estado"
+        parent_location_id_is_not_a_city: "El id de la ubicación no pertenece a una ciudad"

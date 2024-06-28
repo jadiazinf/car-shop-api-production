@@ -1,0 +1,42 @@
+class Api::V1::LocationsController < ApplicationController
+  before_action :set_location, only: %i[show update toggle_active]
+
+  def index
+    @locations = Location.all
+  end
+
+  def show; end
+
+  def create
+    @location = Location.new(location_params)
+    if @location.save
+      render :show, status: :created
+    else
+      render :show, status: :unprocessable_content
+    end
+  end
+
+  def update
+    if @location.update(location_params)
+      render :show, status: :ok
+    else
+      render :show, status: :unprocessable_content
+    end
+  end
+
+  def toggle_active
+    location_services = Locations::ToggleActive.new(@location, location_params[:active])
+    location_services.perform
+    render :show, status: :ok
+  end
+
+  private
+
+  def set_location
+    @location = Location.find(params[:id])
+  end
+
+  def location_params
+    params.require(:location).permit(:name, :location_type, :parent_location_id, :active)
+  end
+end
