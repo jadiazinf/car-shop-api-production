@@ -1,1 +1,1 @@
-json.array! @location, :id, :name, :location_type
+json.array! @locations, :id, :name, :location_type, :parent_location_id, :is_active

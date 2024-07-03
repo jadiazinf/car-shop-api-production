@@ -2,7 +2,8 @@ class Api::V1::LocationsController < ApplicationController
   before_action :set_location, only: %i[show update toggle_active]
 
   def index
-    @locations = Location.all
+    # where locaion is_active is true
+    @locations = Location.where(is_active: true)
   end
 
   def show; end
