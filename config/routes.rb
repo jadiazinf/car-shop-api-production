@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :locations do
+        get :location_childrens, on: :member
         put :toggle_active, on: :member
       end
     end

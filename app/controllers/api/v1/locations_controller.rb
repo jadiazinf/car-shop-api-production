@@ -31,6 +31,11 @@ class Api::V1::LocationsController < ApplicationController
     render :show, status: :ok
   end
 
+  def location_childrens
+    @locations = Location.where(is_active: true, parent_location_id: params[:id])
+    render :index, status: :ok
+  end
+
   private
 
   def set_location
@@ -38,6 +43,6 @@ class Api::V1::LocationsController < ApplicationController
   end
 
   def location_params
-    params.require(:location).permit(:name, :location_type, :parent_location_id, :active)
+    params.require(:location).permit(:id, :name, :location_type, :parent_location_id, :active)
   end
 end

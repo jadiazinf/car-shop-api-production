@@ -12,6 +12,13 @@ RSpec.describe 'Locations' do
     end
   end
 
+  describe 'GET #location_childrens' do
+    it 'returns a success response' do
+      get(location_childrens_api_v1_location_path(location), headers:)
+      expect(response).to be_successful
+    end
+  end
+
   describe 'GET #show' do
     it 'returns a success response' do
       get(api_v1_location_path(location), headers:)
@@ -33,7 +40,8 @@ RSpec.describe 'Locations' do
     let(:new_location) { build(:location) }
     it 'returns a success response' do
       put(api_v1_location_path(location.id),
-          params: { location: new_location.attributes }, headers:, as: :json)
+          params: { location: { id: location.id, new_location.attributes => true } },
+          headers:, as: :json)
       expect(response).to be_successful
     end
   end
