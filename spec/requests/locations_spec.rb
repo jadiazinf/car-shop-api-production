@@ -19,6 +19,13 @@ RSpec.describe 'Locations' do
     end
   end
 
+  describe 'GET #location_by_type' do
+    it 'returns a success response' do
+      get(location_by_type_api_v1_locations_path(location), headers:)
+      expect(response).to be_successful
+    end
+  end
+
   describe 'GET #show' do
     it 'returns a success response' do
       get(api_v1_location_path(location), headers:)

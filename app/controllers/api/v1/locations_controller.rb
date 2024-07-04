@@ -36,6 +36,11 @@ class Api::V1::LocationsController < ApplicationController
     render :index, status: :ok
   end
 
+  def location_by_type
+    @locations = Location.where(is_active: true, location_type: params[:location_type])
+    render :index, status: :ok
+  end
+
   private
 
   def set_location

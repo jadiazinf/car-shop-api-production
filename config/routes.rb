@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       resources :locations do
         get :location_childrens, on: :member
         put :toggle_active, on: :member
+        get ':location_type/location_by_type' => 'locations#location_by_type', on: :collection,
+            as: :location_by_type
       end
     end
   end
