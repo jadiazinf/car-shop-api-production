@@ -13,3 +13,34 @@ en:
         parent_location_id_is_not_a_country: "Location id does not belong to a country"
         parent_location_id_is_not_a_state: "Location id does not belong to a state"
         parent_location_id_is_not_a_city: "Location id does not belong to a city"
+    users:
+      attributes:
+        role:
+          admin: "admin"
+          general: "general"
+          superadmin: "superadmin"
+          supervisor: "supervisor"
+          technician: "technician"
+      errors:
+        email: "Email is required"
+        unique_email: "Email is already taken"
+        password: "Password is required"
+        password_confirmation: "Password confirmation is required"
+        password_not_match: "Password confirmation does not match"
+        first_name: "First name is required"
+        last_name: "Last name is required"
+        unique_dni: "Identification number is already taken"
+        dni: "Identification number is required"
+        birthdate: "Birthdate is required"
+        invalid_role: "is not a valid role"
+        creating_user_error: "Error creating user"
+    auth:
+      errors:
+        invalid_jwt: "Invalid JWT"
+        revoked_jwt: "Revoked JWT"
+        jwt_not_found_in_header: "JWT not found in header"
+        revoke_error: "Error revoking JWT"
+      success:
+        revoked_jwt: "revoked JWT successfully"
+        sign_in_success: "Logged in successfully"
+        sign_up_success: "Signed up successfully"

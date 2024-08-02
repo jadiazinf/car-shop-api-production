@@ -63,3 +63,30 @@ Location.create!(
     { name: 'Punta de Mata', location_type: 'town', parent_location_id: 48 }
   ]
 )
+
+User.create!(
+  [
+    {
+      email: 'jesusdesk@gmail.com',
+      password: '123456',
+      password_confirmation: '123456',
+      first_name: 'Jesus',
+      last_name: 'Diaz',
+      dni: 'V27028320',
+      birthdate: '1997-11-26',
+      address: 'Los Samanes',
+      phonenumber: '0414-1234567'
+    },
+    {
+      email: 'mgratero@gmail.com',
+      password: '123456',
+      password_confirmation: '123456',
+      first_name: 'Miguel',
+      last_name: 'Graterol',
+      dni: 'V12345678',
+      birthdate: '1993-6-21',
+      address: 'Catia',
+      phonenumber: '0414-12345674'
+    }
+  ]
+)

@@ -1,0 +1,39 @@
+class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  # include Devise::JWT::RevocationStrategies::Blacklist # before
+  # include Devise::JWT::RevocationStrategies::JTIMatcher
+
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable,
+         :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+
+  validates :email, presence: { message: I18n.t('active_record.users.errors.email') },
+                    uniqueness: { message: I18n.t('active_record.users.errors.unique_email') }
+  validates :password, presence: {
+    message: I18n.t('active_record.users.errors.password')
+  }, if: lambda {
+    new_record? || password.present?
+  }
+  validates :password_confirmation, presence: {
+    message: I18n.t('active_record.users.errors.password_confirmation')
+  }, if: -> { new_record? || password.present? }
+  validate :password_confirmation_is_valid?, if: -> { new_record? || password.present? }
+
+  validates :first_name, presence: { message: I18n.t('active_record.users.errors.first_name') }
+  validates :last_name, presence: { message: I18n.t('active_record.users.errors.last_name') }
+  validates :dni, presence: { message: I18n.t('active_record.users.errors.dni') },
+                  uniqueness: { message: I18n.t('active_record.users.errors.unique_dni') }
+  validates :birthdate, presence: { message: I18n.t('active_record.users.errors.birthdate') }
+  validates :roles,
+            inclusion: { in: %w[admin general superadmin supervisor technical],
+                         message: I18n.t('active_record.users.errors.invalid_role') }
+
+  private
+
+  def password_confirmation_is_valid?
+    return false unless password.present? && password != password_confirmation
+
+    errors.add(:password_confirmation, I18n.t('active_record.users.errors.password_not_match'))
+  end
+end
