@@ -1,5 +1,7 @@
 en:
   active_record:
+    errors:
+      standard_error: "Internal server error"
     locations:
       attributes:
         location_type:
@@ -40,6 +42,9 @@ en:
         revoked_jwt: "Revoked JWT"
         jwt_not_found_in_header: "JWT not found in header"
         revoke_error: "Error revoking JWT"
+        invalid_email: "Email not found"
+        invalid_password: "Wrong password for user"
+        sign_in_error: "Error signing in"
       success:
         revoked_jwt: "revoked JWT successfully"
         sign_in_success: "Logged in successfully"
