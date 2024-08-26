@@ -1,51 +1,104 @@
 en:
   active_record:
     errors:
-      standard_error: "Internal server error"
+      standard_error: Internal server error
+      general:
+        blank: can't be blank
+        list: is not included in the list
+        taken: has already been taken
+        format: wrong format
     locations:
       attributes:
         location_type:
-          city: "City"
-          state: "State"
-          town: "Town"
+          city: City
+          state: State
+          town: Town
       errors:
         invalid_location_type: '%{value} is not a valid locations type'
-        name_required: "Location name is required"
-        parent_location_id_required: "Location id is required"
-        parent_location_id_is_not_a_country: "Location id does not belong to a country"
-        parent_location_id_is_not_a_state: "Location id does not belong to a state"
-        parent_location_id_is_not_a_city: "Location id does not belong to a city"
+        name_required: Location name is required
+        parent_location_id_required: Location id is required
+        parent_location_id_is_not_a_country: Location id does not belong to a country
+        parent_location_id_is_not_a_state: Location id does not belong to a state
+        parent_location_id_is_not_a_city: Location id does not belong to a city
     users:
       attributes:
         role:
-          admin: "admin"
-          general: "general"
-          superadmin: "superadmin"
-          supervisor: "supervisor"
-          technician: "technician"
+          admin: admin
+          general: general
+          superadmin: superadmin
+          supervisor: supervisor
+          technician: technician
       errors:
-        email: "Email is required"
-        unique_email: "Email is already taken"
-        password: "Password is required"
-        password_confirmation: "Password confirmation is required"
-        password_not_match: "Password confirmation does not match"
-        first_name: "First name is required"
-        last_name: "Last name is required"
-        unique_dni: "Identification number is already taken"
-        dni: "Identification number is required"
-        birthdate: "Birthdate is required"
-        invalid_role: "is not a valid role"
-        creating_user_error: "Error creating user"
+        email: Email is required
+        unique_email: Email is already taken
+        password: Password is required
+        password_confirmation: Password confirmation is required
+        password_not_match: Password confirmation does not match
+        first_name: First name is required
+        last_name: Last name is required
+        unique_dni: Identification number is already taken
+        dni: Identification number is required
+        birthdate: Birthdate is required
+        invalid_role: is not a valid role
+        creating_user_error: Error creating user
+        gender: Gender is required
+        gender_value: Gender must be Male o Female
+        invalid_request: Bad request
+        user_does_not_have_vehicle: User does not have a vehicle, it should have at least one
     auth:
       errors:
-        invalid_jwt: "Invalid JWT"
-        revoked_jwt: "Revoked JWT"
-        jwt_not_found_in_header: "JWT not found in header"
-        revoke_error: "Error revoking JWT"
-        invalid_email: "Email not found"
-        invalid_password: "Wrong password for user"
-        sign_in_error: "Error signing in"
+        invalid_jwt: Invalid JWT
+        revoked_jwt: Revoked JWT
+        jwt_not_found_in_header: JWT not found in header
+        revoke_error: Error revoking JWT
+        invalid_email: Email not found
+        invalid_password: Wrong password for user
+        sign_in_error: Error signing in
       success:
-        revoked_jwt: "revoked JWT successfully"
-        sign_in_success: "Logged in successfully"
-        sign_up_success: "Signed up successfully"
+        revoked_jwt: revoked JWT successfully
+        sign_in_success: Logged in successfully
+        sign_up_success: Signed up successfully
+    vehicles:
+      attributes:
+        license_plate: License Plate
+        brand: Brand
+        model: Model
+        year: Year
+        color: Color
+        plate: Plate
+        type: Type
+        mileage: Mileage
+        load_capacity: Load Capacity (Kg)
+        engine_serial: Engine Serial
+        body_serial: Body Serial
+        transmission: Transmission
+        axles: Axles
+        tires: Tires
+        vehicle_type:
+          third: Less than 2.500 KGs
+          fourth: Between 2.500 and 6.000 KGs
+          fith: Between 6.000 KGs and 9000 KGs
+          tsp: More than 9000 KGs
+        engine_type: Engine Type
+        engine_types:
+          diesel: Diesel
+          gas: Gas
+          gasoline: Gasoline
+          electric: Electric
+          hybrid: Hybrid
+        transmissions:
+          automatic: Automatic Transmission
+          manual: Manual Transmission
+          dct: Dual Clutch Transmission
+          cvt: Continuously Variable Transmission
+      errors:
+        transmission_invalid_value: Transmission must be one of automatic, manual, dct or cvt
+        license_plate_already_taken: License plate already taken
+        engine_serial_already_taken: Engine serial already taken
+        body_serial_already_taken: Body serial already taken
+    brands:
+      errors:
+        taken: Brand already exists
+    models:
+      errors:
+        taken: A model with the same brand already exists

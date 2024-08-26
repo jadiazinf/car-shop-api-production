@@ -10,10 +10,11 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.string :first_name, null: false
       t.string :last_name, null: false
       t.string :dni, null: false, index: { unique: true, name: 'unique_user_dni' }
+      t.string :gender, null: false
       t.date :birthdate, null: false
       t.string :address
       t.string :phonenumber
-      t.string :roles, array: true, default: []
+      t.string :roles, array: true, default: ['general']
       t.boolean :is_active, default: true, null: false
 
       ## Recoverable

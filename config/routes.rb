@@ -26,6 +26,22 @@ Rails.application.routes.draw do
             as: :location_by_type
       end
       resources :users, only: %i[update]
+      resources :vehicles do
+        collection do
+          post :create_vehicle
+        end
+      end
+      resources :brands do
+        collection do
+          post :create_brand
+        end
+      end
+      resources :models do
+        get :show_models_by_brand, on: :member
+        collection do
+          post :create_model
+        end
+      end
     end
   end
 end

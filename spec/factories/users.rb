@@ -10,6 +10,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       birthdate { nil }
       roles { nil }
       is_active { nil }
+      gender { nil }
     end
     trait :with_valid_attr do
       email { Faker::Internet.email }
@@ -23,6 +24,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       is_active { true }
       address { Faker::Address.full_address }
       phonenumber { Faker::PhoneNumber.cell_phone }
+      gender { Faker::Gender.binary_type }
     end
     trait :registration do
       email { Faker::Internet.email }
@@ -34,6 +36,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       birthdate { Faker::Date.birthday(min_age: 18, max_age: 65) }
       address { Faker::Address.full_address }
       phonenumber { Faker::PhoneNumber.cell_phone }
+      gender { Faker::Gender.binary_type }
     end
   end
 end

@@ -1,12 +1,9 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  # include Devise::JWT::RevocationStrategies::Blacklist # before
-  # include Devise::JWT::RevocationStrategies::JTIMatcher
-
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+
+  has_many :vehicles, dependent: :nullify
 
   validates :email, presence: { message: I18n.t('active_record.users.errors.email') },
                     uniqueness: { message: I18n.t('active_record.users.errors.unique_email') }
@@ -24,6 +21,9 @@ class User < ApplicationRecord
   validates :last_name, presence: { message: I18n.t('active_record.users.errors.last_name') }
   validates :dni, presence: { message: I18n.t('active_record.users.errors.dni') },
                   uniqueness: { message: I18n.t('active_record.users.errors.unique_dni') }
+  validates :gender, presence: { message: I18n.t('active_record.users.errors.gender') },
+                     inclusion: { in: %w[Male Female],
+                                  message: I18n.t('active_record.users.errors.gender_value') }
   validates :birthdate, presence: { message: I18n.t('active_record.users.errors.birthdate') }
   validates :roles,
             inclusion: { in: %w[admin general superadmin supervisor technical],

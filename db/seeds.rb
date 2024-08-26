@@ -73,6 +73,7 @@ User.create!(
       first_name: 'Jesus',
       last_name: 'Diaz',
       dni: 'V27028320',
+      gender: 'Male',
       birthdate: '1997-11-26',
       address: 'Los Samanes',
       phonenumber: '0414-1234567'
@@ -84,9 +85,53 @@ User.create!(
       first_name: 'Miguel',
       last_name: 'Graterol',
       dni: 'V12345678',
+      gender: 'Male',
       birthdate: '1993-6-21',
       address: 'Catia',
       phonenumber: '0414-12345674'
+    }
+  ]
+)
+
+Brand.create!(
+  [
+    {
+      name: 'Toyota'
+    },
+    {
+      name: 'Ford'
+    },
+    {
+      name: 'Chevrolet'
+    }
+  ]
+)
+
+Model.create!(
+  [
+    {
+      name: 'Corolla',
+      brand_id: 1
+    },
+    {
+      name: 'Hilux',
+      brand_id: 1
+    },
+    {
+      name: 'Fiesta',
+      brand_id: 2
+    },
+    {
+      name: 'Focus',
+      brand_id: 2
+    },
+    {
+      name: 'Cruze',
+      brand_id: 3
+    },
+    {
+      name: 'Aveo',
+      brand_id: 3
     }
   ]
 )

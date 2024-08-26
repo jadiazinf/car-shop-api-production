@@ -1,51 +1,102 @@
 es:
   active_record:
     errors:
-      standard_error: "Internal server error"
+      standard_error: Internal server error
+      general:
+        blank: no puede estar en blanco
+        list: no está incluido en la lista
+        taken: ya ha sido tomado
+        format: formato incorrecto
     locations:
       attributes:
         location_type:
-          city: "Ciudad"
-          state: "Estado"
-          town: "Municipio"
+          city: Ciudad
+          state: Estado
+          town: Municipio
       errors:
         invalid_location_type: '%{value} no es un tipo de ubicación válido'
-        name_required: "Nombre de la ubicación es requerido"
-        parent_location_id_required: "El id de la ubicación es requerido"
-        parent_location_id_is_not_a_country: "El id de la ubicación no pertenece a un país"
-        parent_location_id_is_not_a_state: "El id de la ubicación no pertenece a un estado"
-        parent_location_id_is_not_a_city: "El id de la ubicación no pertenece a una ciudad"
+        name_required: Nombre de la ubicación es requerido
+        parent_location_id_required: El id de la ubicación es requerido
+        parent_location_id_is_not_a_country: El id de la ubicación no pertenece a un país
+        parent_location_id_is_not_a_state: El id de la ubicación no pertenece a un estado
+        parent_location_id_is_not_a_city: El id de la ubicación no pertenece a una ciudad
     users:
       attributes:
         role:
-          admin: "admin"
-          general: "general"
-          superadmin: "superadmin"
-          supervisor: "supervisor"
-          technician: "técnico"
+          admin: admin
+          general: general
+          superadmin: superadmin
+          supervisor: supervisor
+          technician: técnico
       errors:
-        email: "Email es requerido"
-        unique_email: "Email ya se encuentra registrado"
-        password: "Contraseña es requerida"
-        password_confirmation: "Confirmación de contraseña es requerida"
-        password_not_match: "La confirmación de contraseña no coincide"
-        first_name: "Nombre es requerido"
-        last_name: "Apellido es requerido"
-        unique_dni: "Número de identificación ya se encuentra registrado"
-        dni: "Número de identificación es requerido"
-        birthdate: "Fecha de nacimiento es requerida"
+        email: Email es requerido
+        unique_email: Email ya se encuentra registrado
+        password: Contraseña es requerida
+        password_confirmation: Confirmación de contraseña es requerida
+        password_not_match: La confirmación de contraseña no coincide
+        first_name: Nombre es requerido
+        last_name: Apellido es requerido
+        unique_dni: Número de identificación ya se encuentra registrado
+        dni: Número de identificación es requerido
+        birthdate: Fecha de nacimiento es requerida
         invalid_role: "%{value} no es un rol válido"
-        creating_user_error: "Error creando al usuario"
+        creating_user_error: Error creando al usuario
+        gender: Género es requerido
+        gender_value: Género debe ser Masculino o Femenino
+        invalid_request: Solicitud incorrecta
+        user_does_not_have_vehicle: El usuario no tiene un vehículo, debe tener al menos uno
     auth:
       errors:
-        invalid_jwt: "JWT inválido"
-        revoked_jwt: "JWT revocado"
-        jwt_not_found_in_header: "JWT no encontrado en el encabezado"
-        revoke_error: "Error revocando JWT"
-        invalid_email: "Email no encontrado"
-        invalid_password: "Contraseña incorrecta"
-        sign_in_error: "Error autenticando usuario"
+        invalid_jwt: JWT inválido
+        revoked_jwt: JWT revocado
+        jwt_not_found_in_header: JWT no encontrado en el encabezado
+        revoke_error: Error revocando JWT
+        invalid_email: Email no encontrado
+        invalid_password: Contraseña incorrecta
+        sign_in_error: Error autenticando usuario
       success:
-        revoked_jwt: "JWT revocado exitosamente"
-        sign_in_success: "Inicio de sesión exitoso"
-        sign_up_success: "Registro exitoso"
+        revoked_jwt: JWT revocado exitosamente
+        sign_in_success: Inicio de sesión exitoso
+        sign_up_success: Registro exitoso
+    vehicles:
+      attributes:
+        license_plate: Número de placa
+        year: Año
+        color: Color
+        plate: Placa
+        type: Tipo
+        mileage: Kilometraje
+        load_capacity: Capacidad de Carga (Kg)
+        engine_serial: Serial de motor
+        body_serial: Serial de carrocería
+        transmission: Transmisión
+        axles: Cantidad de Ejes
+        tires: Cantidad de Cauchos
+        vehicle_type:
+          third: Menor a 2.500 KGs
+          fourth: Entre 2.500 y 6.000 KGs
+          fith: Entre 6.000 KGs y 9000 KGs
+          tsp: Mayor a 9000 KGs
+        engine_type: Tipo de motor
+        engine_types:
+          diesel: Diesel
+          gas: Gas
+          gasoline: Gasolina
+          electric: Eléctrico
+          hybrid: Híbrido
+        transmissions:
+          automatic: Transmisión automática
+          manual: Transmisión manual
+          dct: Transmisión de doble embrague
+          cvt: Transmisión continuamente variable
+      errors:
+        transmission_invalid_value: La transmisión debe ser Automática, Manual o Secuencial
+        license_plate_already_taken: Número de placa ya registrado
+        engine_serial_already_taken: Serial de motor ya registrado
+        body_serial_already_taken: Serial de carrocería ya registrado
+    brands:
+      errors:
+        taken: Marca ya existe
+    models:
+      errors:
+        taken: Un modelo con ese nombre y marca ya existe
