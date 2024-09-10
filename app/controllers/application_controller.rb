@@ -35,4 +35,33 @@ class ApplicationController < ActionController::API
     token = request.headers['Authorization']&.split&.last
     JWTWrapper.decode(token) if token
   end
+
+  def render_response(obj)
+    render 'application_response',
+           status: obj[:status],
+           locals: { ok: obj[:ok], status: obj[:status], data: obj[:data], message: obj[:message],
+                     errors: obj[:errors] }
+  end
+
+  def render_unauthorized(errors)
+    render_response(ok: false, status: :unauthorized, data: nil, message: 'Unauthorized', errors:)
+  end
+
+  def render_success_response(data)
+    render_response(ok: true, status: :ok, data:, message: nil, errors: nil)
+  end
+
+  def render_internal_server_error(errors)
+    render_response(ok: false, status: :internal_server_error, data: nil, message: nil, errors:)
+  end
+
+  def authorize_superadmin
+    return if current_user[:roles].include?('superadmin')
+
+    render_unauthorized(nil)
+  end
+
+  def render_bad_request(errors)
+    render_response(ok: false, status: :bad_request, data: nil, message: nil, errors:)
+  end
 end

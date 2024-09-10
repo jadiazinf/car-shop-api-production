@@ -42,6 +42,7 @@ Rails.application.routes.draw do
           post :create_model
         end
       end
+      resources :companies
     end
   end
 end

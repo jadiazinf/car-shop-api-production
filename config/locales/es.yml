@@ -100,3 +100,12 @@ es:
     models:
       errors:
         taken: Un modelo con ese nombre y marca ya existe
+    companies:
+      attributes:
+        request_status:
+          pending: Pendiente
+          approved: Aprobado
+          rejected: Rechazado
+      errors:
+        request_status:
+          invalid: Estado de solicitud inválido

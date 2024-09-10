@@ -5,6 +5,8 @@ class User < ApplicationRecord
 
   has_many :vehicles, dependent: :nullify
 
+  belongs_to :company, optional: true
+
   validates :email, presence: { message: I18n.t('active_record.users.errors.email') },
                     uniqueness: { message: I18n.t('active_record.users.errors.unique_email') }
   validates :password, presence: {

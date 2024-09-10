@@ -102,3 +102,12 @@ en:
     models:
       errors:
         taken: A model with the same brand already exists
+    companies:
+      attributes:
+        request_status:
+          pending: Pending
+          approved: Approved
+          rejected: Rejected
+      errors:
+        request_status:
+          invalid: Invalid request status
