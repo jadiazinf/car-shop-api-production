@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_03_154433) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_10_213203) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -32,11 +32,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_03_154433) do
     t.string "social_networks", default: [], null: false, array: true
     t.string "phonenumbers", default: [], null: false, array: true
     t.string "address", null: false
-    t.string "request_status", default: "pending", null: false
+    t.boolean "is_active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "location_id"
     t.index ["location_id"], name: "index_companies_on_location_id"
+  end
+
+  create_table "company_creation_requests", force: :cascade do |t|
+    t.string "status", default: "pending", null: false
+    t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "company_id", null: false
+    t.bigint "responder_user_id"
+    t.index ["company_id"], name: "index_company_creation_requests_on_company_id"
+    t.index ["responder_user_id"], name: "index_company_creation_requests_on_responder_user_id"
   end
 
   create_table "jwt_denylist", force: :cascade do |t|
@@ -118,6 +129,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_03_154433) do
   end
 
   add_foreign_key "companies", "locations"
+  add_foreign_key "company_creation_requests", "companies"
+  add_foreign_key "company_creation_requests", "users", column: "responder_user_id"
   add_foreign_key "locations", "locations", column: "parent_location_id"
   add_foreign_key "models", "brands"
   add_foreign_key "users", "companies"

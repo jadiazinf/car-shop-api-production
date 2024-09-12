@@ -7,6 +7,9 @@ es:
         list: no está incluido en la lista
         taken: ya ha sido tomado
         format: formato incorrecto
+        record_not_found: Registro no encontrado
+        id_is_required: Id es requerido
+        validation_error: Error de validación
     locations:
       attributes:
         location_type:
@@ -109,3 +112,13 @@ es:
       errors:
         request_status:
           invalid: Estado de solicitud inválido
+    company_creation_requests:
+      errors:
+        company_id_required: Id de la compañía es requerido
+        responder_id_required: Id del respondiente es requerido
+        status_required: Estado de la solicitud es requerido
+        message_required: Mensaje es requerido
+      success:
+        request_created: Solicitud creada exitosamente
+        approved_request: Solicitud aprobada exitosamente
+        rejected_request: Solicitud rechazada exitosamente

@@ -43,6 +43,7 @@ Rails.application.routes.draw do
         end
       end
       resources :companies
+      resources :company_creation_requests, only: [:update]
     end
   end
 end

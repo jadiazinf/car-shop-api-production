@@ -39,3 +39,5 @@ credentials
 /config/credentials/development.key
 
 .vscode
+
+credentials.yml.enc

@@ -7,6 +7,9 @@ en:
         list: is not included in the list
         taken: has already been taken
         format: wrong format
+        record_not_found: Record not found
+        id_is_required: Id is required
+        validation_error: Validation error
     locations:
       attributes:
         location_type:
@@ -111,3 +114,13 @@ en:
       errors:
         request_status:
           invalid: Invalid request status
+    company_creation_requests:
+      errors:
+        company_id_required: Company id is required
+        responder_id_required: Responder id is required
+        status_required: Request status is required
+        message_required: Message is required
+      success:
+        request_created: Request created successfully
+        approved_request: Request approved successfully
+        rejected_request: Request rejected successfully

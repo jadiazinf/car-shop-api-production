@@ -10,7 +10,7 @@ class CreateCompanies < ActiveRecord::Migration[7.1]
       t.string :social_networks, array: true, default: [], null: false
       t.string :phonenumbers, array: true, default: [], null: false
       t.string :address, null: false
-      t.string :request_status, null: false, default: 'pending'
+      t.boolean :is_active, null: false, default: false
       t.timestamps
     end
   end

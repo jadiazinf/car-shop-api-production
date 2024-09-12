@@ -1,10 +1,9 @@
 class Api::V1::CompaniesController < ApplicationController
-  # before_action :set_company, only: [:show, :edit, :update, :destroy]
-
   def create
     @company = Company.new(company_params)
-
     if @company.save
+      company_creation_request = CompanyCreationRequests::Create.new(company_id: @company.id)
+      company_creation_request.perform
       render_success_response(@company)
     else
       render_bad_request(@company.errors)

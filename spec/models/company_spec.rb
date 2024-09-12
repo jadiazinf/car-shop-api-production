@@ -51,17 +51,12 @@ RSpec.describe Company do
       expect(company.errors[:payment_methods]).to include("can't be blank")
     end
 
-    it 'validates presence of request_status' do
-      company.request_status = nil
-      expect(company).not_to be_valid
-      expect(company.errors[:request_status]).to include("can't be blank")
-    end
-
     # TODO: hablarlo con Miguel. Validar el status de la petición, pero está fallando.
     # it 'validates inclusion of request_status' do
     #   company = Company.new(request_status: 'invalid_status')
     #   expect(company.valid?).to be_falsey
-    #   expect(company.errors[:request_status]).to include(I18n.t('active_record.companies.errors.request_status.invalid'))
+    #   expect(company.errors[:request_status]).to
+    #   include(I18n.t('active_record.companies.errors.request_status.invalid'))
     # end
   end
 end

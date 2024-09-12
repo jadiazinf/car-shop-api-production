@@ -18,7 +18,7 @@ RSpec.describe 'Companies' do
       end
     end
 
-    # TODO: preguntarle a miguel por que esta pedazo de mierda no sirv por los malditos atributos del coño
+    # TODO: preguntarle a miguel por que esta pedazo de mierda no sirv por los malditos atributos
     context 'with invalid attributes' do
       it 'does not create a new company' do
         post(api_v1_companies_path,
