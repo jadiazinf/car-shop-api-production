@@ -33,7 +33,7 @@ RSpec.describe 'Locations' do
     end
   end
 
-  describe 'POST #create' do
+  describe 'POST #create.rb' do
     let(:location) { build(:location) }
     it 'returns a success response' do
       post(api_v1_locations_path,

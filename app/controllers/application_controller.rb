@@ -27,6 +27,18 @@ class ApplicationController < ActionController::API
     end
   end
 
+  def authorize_admin!
+    return if current_user[:roles].include?('admin')
+
+    render_unauthorized(nil)
+  end
+
+  def authorize_superadmin!
+    return if current_user[:roles].include?('superadmin')
+
+    render_unauthorized(nil)
+  end
+
   def current_user
     @current_user ||= User.find_by(id: decoded_jwt_token['sub']) if decoded_jwt_token
   end

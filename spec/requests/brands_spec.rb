@@ -52,7 +52,7 @@ RSpec.describe 'Brands' do
     end
   end
 
-  describe 'POST #create' do
+  describe 'POST #create.rb' do
     let(:brand) { create(:brand, :valid_brand) }
     it 'returns a success response' do
       post(api_v1_brands_path,

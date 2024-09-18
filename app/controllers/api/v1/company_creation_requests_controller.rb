@@ -1,4 +1,25 @@
 class Api::V1::CompanyCreationRequestsController < ApplicationController
+  def index
+    company_creation_requests = CompanyCreationRequest.all
+    render json: company_creation_requests, status: :ok
+  end
+
+  def show
+    id = params[:id]
+    company_creation_request = CompanyCreationRequest.find(id)
+    render json: company_creation_request, status: :ok
+  rescue ActiveRecord::RecordNotFound => e
+    render json: { error: e.message }, status: :not_found
+  end
+
+  def show_by_company_id
+    company_id = params[:company_id]
+    company_creation_request = CompanyCreationRequest.find_by(company_id:)
+    render json: company_creation_request, status: :ok
+  rescue ActiveRecord::RecordNotFound => e
+    render json: { error: e.message }, status: :not_found
+  end
+
   def update
     id = params[:id]
     service = CompanyCreationRequests::Update.new(company_creation_request_params.merge(id:))

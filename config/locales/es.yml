@@ -48,6 +48,7 @@ es:
         gender_value: Género debe ser Masculino o Femenino
         invalid_request: Solicitud incorrecta
         user_does_not_have_vehicle: El usuario no tiene un vehículo, debe tener al menos uno
+        user_not_found: User not found
     auth:
       errors:
         invalid_jwt: JWT inválido
@@ -105,13 +106,16 @@ es:
         taken: Un modelo con ese nombre y marca ya existe
     companies:
       attributes:
-        request_status:
-          pending: Pendiente
-          approved: Aprobado
-          rejected: Rechazado
+        wrong_company_images_format: Formato de imagen incorrecto. Debe ser un JPG, PNG o JPEG
+        wrong_company_charter_format: Formato de acta constitutiva incorrecto. Debe ser un PDF
+        image_size_exceeded: Tamaño de imagen excedido, debe ser menor a 5MB
       errors:
-        request_status:
-          invalid: Estado de solicitud inválido
+        wrong_company_images_format: Formato de imagen incorrecto. Debe ser un JPG, PNG o JPEG
+        wrong_company_charter_format: Formato de acta constitutiva incorrecto. Debe ser un PDF
+        image_size_exceeded: Image size exceeded, it must be less than 5MB
+        error_trying_to_attach_images: Error trying to attach images
+        error_trying_to_attach_charter: Error trying to attach charter
+        user_is_required: Se requiere un usuario
     company_creation_requests:
       errors:
         company_id_required: Id de la compañía es requerido

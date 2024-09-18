@@ -54,7 +54,7 @@ RSpec.describe 'Models' do
     end
   end
 
-  describe 'POST #create' do
+  describe 'POST #create.rb' do
     context 'with not a valid user' do
       it 'returns an unauthorized' do
         post(api_v1_models_path,

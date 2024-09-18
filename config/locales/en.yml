@@ -48,6 +48,7 @@ en:
         gender_value: Gender must be Male o Female
         invalid_request: Bad request
         user_does_not_have_vehicle: User does not have a vehicle, it should have at least one
+        user_not_found: User not found
     auth:
       errors:
         invalid_jwt: Invalid JWT
@@ -107,13 +108,13 @@ en:
         taken: A model with the same brand already exists
     companies:
       attributes:
-        request_status:
-          pending: Pending
-          approved: Approved
-          rejected: Rejected
       errors:
-        request_status:
-          invalid: Invalid request status
+        wrong_company_images_format: Wrong company images format. Supported formats are JPG, JPEG, PNG
+        wrong_company_charter_format: Wrong company charter format. It must be a PDF
+        image_size_exceeded: Image size exceeded, it must be less than 5MB
+        error_trying_to_attach_images: Error trying to attach images
+        error_trying_to_attach_charter: Error trying to attach charter
+        user_is_required: User is required
     company_creation_requests:
       errors:
         company_id_required: Company id is required

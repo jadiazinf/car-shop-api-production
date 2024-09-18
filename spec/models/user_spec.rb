@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe User do
-  context 'create user ' do
-    context 'cant create user with invalid attributes' do
+  context 'create.rb user ' do
+    context 'cant create.rb user with invalid attributes' do
       let(:invalid_user) { build(:user, :with_invalid_attr) }
 
-      it 'Wrong values for create new user' do
+      it 'Wrong values for create.rb new user' do
         invalid_user.save
         errors = invalid_user.errors
         expect(errors[:email].include?(I18n.t('active_record.users.errors.email'))).to be true
@@ -47,9 +47,9 @@ RSpec.describe User do
         expect(errors[:roles].include?(expected)).to be true
       end
     end
-    context 'create user with valid attributes' do
+    context 'create.rb user with valid attributes' do
       let(:valid_user) { build(:user, :with_valid_attr) }
-      it 'Correct values for create new user' do
+      it 'Correct values for create.rb new user' do
         expect(valid_user.valid?).to be true
       end
     end
