@@ -6,11 +6,13 @@ class Vehicles::Create
   end
 
   def perform
-    vehicle = Vehicle.new(vehicle_params)
-    if vehicle.save
-      [true, nil, vehicle]
+    @vehicle = Vehicle.new(vehicle_params)
+    if @vehicle.valid?
+      attach_images
+      @vehicle.save
+      [true, nil, @vehicle]
     else
-      [false, vehicle.errors.full_messages, nil]
+      [false, @vehicle.errors.full_messages, nil]
     end
   end
 
@@ -49,5 +51,11 @@ class Vehicles::Create
     return true if v.present?
 
     false
+  end
+
+  def attach_images
+    @vehicle_params[:vehicle_images].each do |image|
+      @vehicle.vehicle_images.attach(image)
+    end
   end
 end

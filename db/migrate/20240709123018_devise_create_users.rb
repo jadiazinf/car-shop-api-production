@@ -13,8 +13,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.1]
       t.string :gender, null: false
       t.date :birthdate, null: false
       t.string :address
-      t.string :phonenumber
-      t.string :roles, array: true, default: ['general']
+      t.string :phone_number
       t.boolean :is_active, default: true, null: false
 
       ## Recoverable

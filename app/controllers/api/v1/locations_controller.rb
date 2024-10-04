@@ -1,4 +1,6 @@
 class Api::V1::LocationsController < ApplicationController
+  skip_before_action :authenticate_user!, only: %i[index show update], raise: false
+  skip_before_action :authorize_superadmin!, only: %i[index show], raise: false
   before_action :set_location, only: %i[show update toggle_active]
 
   def index
@@ -40,6 +42,13 @@ class Api::V1::LocationsController < ApplicationController
     render_success_response(@locations)
   end
 
+  def location_parents
+    @locations = Locations::LocationParents.new(params[:id]).perform
+    result = []
+    result = @locations.push(Location.find(params[:id])) unless @locations.nil?
+    render_success_response(result)
+  end
+
   private
 
   def set_location
@@ -47,6 +56,7 @@ class Api::V1::LocationsController < ApplicationController
   end
 
   def location_params
-    params.require(:location).permit(:id, :name, :location_type, :parent_location_id, :active)
+    params.require(:location).permit(:id, :name, :location_type, :parent_location_id, :active,
+                                     :company_id)
   end
 end

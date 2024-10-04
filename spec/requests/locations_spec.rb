@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Locations' do
   let!(:location) { create(:location) }
   let!(:headers) { { 'Accept' => 'application/json', 'Content-Type' => 'application/json' } }
-  # let!(:auth_headers) { Devise::JWT::TestHelpers.auth_headers(headers, user) }
+  let!(:superadmin) { create(:user_company, :valid_superadmin) }
+  let!(:auth_headers) { Devise::JWT::TestHelpers.auth_headers(headers, superadmin.user) }
 
   describe 'GET #index' do
     it 'returns a success response' do

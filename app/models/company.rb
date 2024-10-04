@@ -1,6 +1,7 @@
 class Company < ApplicationRecord
-  has_many :users, dependent: :nullify
   belongs_to :location, optional: false
+  has_many :user_companies, dependent: :destroy
+  has_many :users, through: :user_companies
   has_one_attached :company_charter
   has_many_attached :company_images
 
@@ -12,13 +13,15 @@ class Company < ApplicationRecord
   validates :name, :email, :address, :dni, :company_charter, :company_images, :user_ids,
             :number_of_employees, presence: true
 
+  validates :dni, uniqueness: { message: I18n.t('active_record.companies.errors.unique_dni') }
+  validates :email, uniqueness: { message: I18n.t('active_record.companies.errors.unique_email') }
   validate :validate_company_charter
   validate :validate_company_images
-  validate :validate_location_type
+  validate :validate_type
 
   private
 
-  def validate_location_type
+  def validate_type
     return if location.nil? || location.location_type == 'town'
 
     errors.add(:location_id, I18n.t('active_record.companies.errors.wrong_location_type'))
@@ -38,8 +41,6 @@ class Company < ApplicationRecord
       unless ['image/png', 'image/jpg', 'image/jpeg'].include?(image.content_type)
         errors.add(:company_images, IMAGE_WRONG_FORMAT_MESSAGE)
       end
-
-      errors.add(:company_images, SIZE_EXCEEDED_MESSAGE) if image.byte_size > 5.megabytes
     end
   end
 end

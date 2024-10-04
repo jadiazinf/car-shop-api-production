@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Company do
-  describe 'validations' do
+  context 'attribute validations' do
     let(:company) { Company.new }
 
     it 'validates presence of name' do
@@ -37,6 +37,13 @@ RSpec.describe Company do
       company.dni = nil
       expect(company).not_to be_valid
       expect(company.errors[:dni]).to include("can't be blank")
+    end
+  end
+
+  context 'create company' do
+    let(:valid_company) { build(:company) }
+    it 'creates an instance' do
+      expect(valid_company.valid?).to be true
     end
   end
 end

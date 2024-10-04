@@ -8,7 +8,6 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       last_name { nil }
       dni { nil }
       birthdate { nil }
-      roles { nil }
       is_active { nil }
       gender { nil }
     end
@@ -20,10 +19,9 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       last_name { Faker::Name.last_name }
       dni { Faker::IdNumber.valid }
       birthdate { Faker::Date.birthday(min_age: 18, max_age: 65) }
-      roles { ['admin'] }
       is_active { true }
       address { Faker::Address.full_address }
-      phonenumber { Faker::PhoneNumber.cell_phone }
+      phone_number { Faker::PhoneNumber.cell_phone }
       gender { Faker::Gender.binary_type }
     end
     trait :registration do
@@ -35,8 +33,12 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       dni { Faker::IdNumber.valid }
       birthdate { Faker::Date.birthday(min_age: 18, max_age: 65) }
       address { Faker::Address.full_address }
-      phonenumber { Faker::PhoneNumber.cell_phone }
+      phone_number { Faker::PhoneNumber.cell_phone }
       gender { Faker::Gender.binary_type }
+    end
+
+    after(:build) do |user|
+      user.location = create(:location, :valid_town)
     end
   end
 end

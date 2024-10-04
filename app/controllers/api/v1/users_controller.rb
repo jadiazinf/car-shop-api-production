@@ -10,11 +10,16 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def user_companies
+    companies = @user.companies
+    render json: companies, status: :ok
+  end
+
   private
 
   def user_params
     params.require(:user).permit(:id, :email, :first_name, :last_name, :dni, :birthdate, :address,
-                                 :phonenumber, :is_active, roles: [])
+                                 :phone_number, :is_active, roles: [])
   end
 
   def set_user

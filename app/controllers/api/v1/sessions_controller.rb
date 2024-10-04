@@ -19,7 +19,7 @@ class Api::V1::SessionsController < Devise::SessionsController
       render_unauthorized(auth_result[1])
     else
       configure_header
-      render_success_response(auth_result[1])
+      render_success_response({ user: auth_result[1] })
     end
   rescue StandardError
     render_internal_server_error(I18n.t('active_record.errors.standard_error'))

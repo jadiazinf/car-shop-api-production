@@ -1,15 +1,16 @@
-# This file should ensure the existence of records required to
-# run the application in every environment (production,
-# development, test). The code here should be idempotent so that
-# it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed
-# command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+# # This file should ensure the existence of records required to
+# # run the application in every environment (production,
+# # development, test). The code here should be idempotent so that
+# # it can be executed at any point in every environment.
+# # The data can then be loaded with the bin/rails db:seed
+# # command (or created alongside the database with db:setup).
+# #
+# # Example:
+# #
+# #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
+# #     MovieGenre.find_or_create_by!(name: genre_name)
+# #   end
+
 Location.create!(
   [
     { name: 'Venezuela', location_type: 'country', parent_location_id: nil },
@@ -76,7 +77,8 @@ User.create!(
       gender: 'Male',
       birthdate: '1997-11-26',
       address: 'Los Samanes',
-      phonenumber: '0414-1234567'
+      phone_number: '0414-1234567',
+      location_id: 4
     },
     {
       email: 'mgratero@gmail.com',
@@ -88,7 +90,8 @@ User.create!(
       gender: 'Male',
       birthdate: '1993-6-21',
       address: 'Catia',
-      phonenumber: '0414-12345674'
+      phone_number: '0414-12345674',
+      location_id: 4
     }
   ]
 )
@@ -135,3 +138,37 @@ Model.create!(
     }
   ]
 )
+
+user = User.find(2)
+
+gma = Company.new(
+  name: 'GMA Desarrollo, C.A',
+  dni: '1234567890',
+  email: 'mgratero@gmail.com',
+  number_of_employees: 1,
+  phone_numbers: ['0424-1234589'],
+  address: 'Sta Rosa',
+  location_id: Location.where(location_type: 'town').first.id,
+  user_ids: [user.id]
+)
+
+gma.company_charter.attach(
+  io: Rails.root.join('spec/fixtures/files/company_charter.pdf').open,
+  filename: 'company_charter.pdf',
+  content_type: 'application/pdf'
+)
+
+gma.company_images.attach(
+  [
+    {
+      io: Rails.root.join('spec/fixtures/files/image.jpg').open,
+      filename: 'image.jpg',
+      content_type: 'image/jpg'
+    }
+  ]
+)
+
+gma.save
+
+user_company = UserCompany.where(company_id: gma.id, user_id: user.id).first
+user_company.update!(roles: ['superadmin'])

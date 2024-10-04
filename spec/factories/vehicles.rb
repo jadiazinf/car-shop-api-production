@@ -12,6 +12,10 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     transmission { Vehicle.transmissions['automatic'] }
     axles { 2 }
     tires { 4 }
+    after(:build) do |vehicle|
+      vehicle.model = create(:model, :valid_model)
+      vehicle.user = create(:user, :registration)
+    end
 
     trait :invalid do
       year { nil }
@@ -26,6 +30,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       transmission { nil }
       axles { nil }
       tires { nil }
+      vehicle_images { nil }
     end
   end
 end

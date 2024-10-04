@@ -28,13 +28,15 @@ class ApplicationController < ActionController::API
   end
 
   def authorize_admin!
-    return if current_user[:roles].include?('admin')
+    user_roles = current_user.roles(params[:company_id])
+    return if user_roles.include?('admin')
 
     render_unauthorized(nil)
   end
 
   def authorize_superadmin!
-    return if current_user[:roles].include?('superadmin')
+    user_roles = current_user.roles(params[:company_id])
+    return if user_roles.include?('superadmin')
 
     render_unauthorized(nil)
   end
@@ -65,12 +67,6 @@ class ApplicationController < ActionController::API
 
   def render_internal_server_error(errors)
     render_response(ok: false, status: :internal_server_error, data: nil, message: nil, errors:)
-  end
-
-  def authorize_superadmin
-    return if current_user[:roles].include?('superadmin')
-
-    render_unauthorized(nil)
   end
 
   def render_bad_request(errors)

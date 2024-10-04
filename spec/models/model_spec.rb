@@ -12,8 +12,7 @@ RSpec.describe Model do
   end
 
   context 'when the attributes are valid' do
-    let(:brand) { create(:brand, :valid_brand) }
-    let(:valid_model) { build(:model, :valid_model, brand_id: brand.id) }
+    let(:valid_model) { build(:model, :valid_model) }
     it 'is valid' do
       expect(valid_model.valid?).to be true
     end

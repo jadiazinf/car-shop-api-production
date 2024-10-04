@@ -1,4 +1,4 @@
-class CompanyCreationRequests::Create
+class UsersCompaniesRequests::Create
   attr_reader :company_id
 
   def initialize(params)
@@ -7,7 +7,7 @@ class CompanyCreationRequests::Create
   end
 
   def perform
-    request = CompanyCreationRequest.new(company_id:)
+    request = UserCompanyRequest.new(company_id:)
     request.save
     if request.save
       { success: true, request: }
@@ -24,6 +24,6 @@ class CompanyCreationRequests::Create
     return if company_id
 
     raise ArgumentError,
-          I18n.t('active_record.company_creation_requests.errors.company_id_required')
+          I18n.t('active_record.users_companies_requests.errors.company_id_required')
   end
 end

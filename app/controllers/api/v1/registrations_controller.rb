@@ -4,8 +4,9 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   private
 
   def sign_up_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :first_name,
-                                 :last_name, :dni, :birthdate, :address, :phonenumber, :gender)
+    params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name,
+                                 :dni, :birthdate, :address, :phone_number, :gender, :location_id,
+                                 roles: [])
   end
 
   def respond_with(resource, _opts = {})

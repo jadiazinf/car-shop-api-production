@@ -1,4 +1,4 @@
-class CompanyCreationRequests::Update
+class UsersCompaniesRequests::Update
   attr_reader :id, :company_id, :responder_user_id, :status, :message
 
   def initialize(params)
@@ -37,30 +37,30 @@ class CompanyCreationRequests::Update
     return true if company_id
 
     raise ArgumentError,
-          I18n.t('active_record.company_creation_requests.errors.company_id_required')
+          I18n.t('active_record.users_companies_requests.errors.company_id_required')
   end
 
   def responder_user_id_valid?
     return true if responder_user_id
 
     raise ArgumentError,
-          I18n.t('active_record.company_creation_requests.errors.responder_id_required')
+          I18n.t('active_record.users_companies_requests.errors.responder_id_required')
   end
 
   def status_valid?
     return true if status
 
-    raise ArgumentError, I18n.t('active_record.company_creation_requests.errors.status_required')
+    raise ArgumentError, I18n.t('active_record.users_companies_requests.errors.status_required')
   end
 
   def message_valid?
     return true if message
 
-    raise ArgumentError, I18n.t('active_record.company_creation_requests.errors.message_required')
+    raise ArgumentError, I18n.t('active_record.users_companies_requests.errors.message_required')
   end
 
   def update_request
-    @request = CompanyCreationRequest.find(id)
+    @request = UserCompanyRequest.find(id)
     @request.update!(status:, responder_user_id:, message:)
   end
 
@@ -75,13 +75,13 @@ class CompanyCreationRequests::Update
   end
 
   def handle_not_found(error)
-    message = I18n.t('active_record.company_creation_requests.errors.record_not_found')
+    message = I18n.t('active_record.users_companies_requests.errors.record_not_found')
     Rails.logger.error("#{message}: #{error.message}")
     raise ActiveRecord::RecordNotFound, error.message
   end
 
   def handle_validation_error(error)
-    message = I18n.t('active_record.company_creation_requests.errors.validation_error')
+    message = I18n.t('active_record.users_companies_requests.errors.validation_error')
     Rails.logger.error("#{message}: #{error.message}")
     raise ActiveRecord::RecordInvalid, error.message
   end

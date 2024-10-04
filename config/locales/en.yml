@@ -49,6 +49,7 @@ en:
         invalid_request: Bad request
         user_does_not_have_vehicle: User does not have a vehicle, it should have at least one
         user_not_found: User not found
+        invalid_location_type: Location type should be a town
     auth:
       errors:
         invalid_jwt: Invalid JWT
@@ -100,6 +101,7 @@ en:
         license_plate_already_taken: License plate already taken
         engine_serial_already_taken: Engine serial already taken
         body_serial_already_taken: Body serial already taken
+        invalid_images_format: Wrong vehicles images format. Supported formats are JPG, JPEG, PNG
     brands:
       errors:
         taken: Brand already exists
@@ -115,7 +117,10 @@ en:
         error_trying_to_attach_images: Error trying to attach images
         error_trying_to_attach_charter: Error trying to attach charter
         user_is_required: User is required
-    company_creation_requests:
+        wrong_location_type: Wrong location type, must be a town
+        unique_dni: Identification number is already taken
+        unique_email: Email is already taken
+    users_companies_requests:
       errors:
         company_id_required: Company id is required
         responder_id_required: Responder id is required
@@ -125,3 +130,9 @@ en:
         request_created: Request created successfully
         approved_request: Request approved successfully
         rejected_request: Request rejected successfully
+    user_company:
+      errors:
+        roles: Roles must be one of admin, superadmin, general, supervisor or technical
+        another_user_already_requested: Another user already requested the creation of this company
+        user_required: A user is required
+        company_required: A company is required

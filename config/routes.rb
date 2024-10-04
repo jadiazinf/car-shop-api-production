@@ -19,31 +19,50 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
-      resources :locations do
-        get :location_childrens, on: :member
-        put :toggle_active, on: :member
-        get ':location_type/location_by_type' => 'locations#location_by_type', on: :collection,
-            as: :location_by_type
+      resources :users do
+        get :user_companies, on: :member
       end
-      resources :users, only: %i[update]
+
       resources :vehicles do
         collection do
           post :create_vehicle
         end
       end
-      resources :brands do
-        collection do
-          post :create_brand
+
+      resources :locations do
+        get :location_childrens, on: :member
+        put :toggle_active, on: :member
+        get ':location_type/location_by_type' => 'locations#location_by_type', on: :collection,
+            as: :location_by_type
+        get :location_parents, on: :member
+      end
+
+      resources :users_companies_requests do
+        get :show_by_company_id, on: :collection
+        get :can_user_make_a_request, on: :collection
+      end
+
+      resources :companies do
+        get :show_by_company_id, on: :collection
+        get :company_charter, on: :member
+        get :company_images, on: :member
+        get :roles_by_company, on: :member
+      end
+
+      namespace :super_admin do
+        resources :brands do
+          collection do
+            post :create_brand
+          end
+        end
+
+        resources :models do
+          get :show_models_by_brand, on: :member
+          collection do
+            post :create_model
+          end
         end
       end
-      resources :models do
-        get :show_models_by_brand, on: :member
-        collection do
-          post :create_model
-        end
-      end
-      resources :companies
-      resources :company_creation_requests, only: [:update]
     end
   end
 end

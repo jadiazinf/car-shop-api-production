@@ -6,16 +6,23 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     number_of_employees { Faker::Number.between(from: 1, to: 100) }
     payment_methods { [Faker::Finance.credit_card] }
     social_networks { [Faker::Internet.url] }
-    phonenumbers { [Faker::PhoneNumber.phone_number] }
+    phone_numbers { [Faker::PhoneNumber.phone_number] }
     address { Faker::Address.full_address }
     is_active { false }
 
     after(:build) do |company|
       company.location = create(:location, :valid_town)
-    end
-
-    after(:build) do |company|
-      company.users = [create(:user, :with_valid_attr)]
+      company.company_charter.attach(
+        io: Rails.root.join('spec/fixtures/files/company_charter.pdf').open,
+        filename: 'company_charter.pdf',
+        content_type: 'application/pdf'
+      )
+      company.company_images.attach(
+        io: Rails.root.join('spec/fixtures/files/image.jpg').open,
+        filename: 'image.jpg',
+        content_type: 'image/jpg'
+      )
+      company.users = [create(:user, :registration)]
     end
 
     trait :active do

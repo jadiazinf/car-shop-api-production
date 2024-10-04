@@ -20,13 +20,7 @@ class Companies::Create
     validate_user
     return unless @company.errors.empty?
 
-    relate_user_with_company
     @company.save
-  end
-
-  def relate_user_with_company
-    @user.company_id = @company.id
-    @user.save
   end
 
   def validate_user
@@ -52,7 +46,7 @@ class Companies::Create
   end
 
   def create_request_for_company_creation
-    company_creation_request = CompanyCreationRequests::Create.new(company_id: @company.id)
+    company_creation_request = UsersCompaniesRequests::Create.new(company_id: @company.id)
     company_creation_request.perform
   end
 end

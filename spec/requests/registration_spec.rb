@@ -1,6 +1,6 @@
 require 'rails_helper'
 RSpec.describe 'Users' do
-  let(:user) { attributes_for(:user, :registration) }
+  let(:user) { build(:user, :registration) }
   describe 'POST #create.rb' do
     it 'returns a success response' do
       post(user_registration_path,

@@ -12,12 +12,12 @@ es:
         validation_error: Error de validación
     locations:
       attributes:
-        location_type:
+        type:
           city: Ciudad
           state: Estado
           town: Municipio
       errors:
-        invalid_location_type: '%{value} no es un tipo de ubicación válido'
+        invalid_type: '%{value} no es un tipo de ubicación válido'
         name_required: Nombre de la ubicación es requerido
         parent_location_id_required: El id de la ubicación es requerido
         parent_location_id_is_not_a_country: El id de la ubicación no pertenece a un país
@@ -49,6 +49,7 @@ es:
         invalid_request: Solicitud incorrecta
         user_does_not_have_vehicle: El usuario no tiene un vehículo, debe tener al menos uno
         user_not_found: User not found
+        invalid_location_type: Ubicación debe de ser un municipio
     auth:
       errors:
         invalid_jwt: JWT inválido
@@ -98,6 +99,7 @@ es:
         license_plate_already_taken: Número de placa ya registrado
         engine_serial_already_taken: Serial de motor ya registrado
         body_serial_already_taken: Serial de carrocería ya registrado
+        invalid_images_format: Formato de imágenes de vehículo incorrecto. Los formatos soportados son PNG, JPEG y JPG
     brands:
       errors:
         taken: Marca ya existe
@@ -106,9 +108,6 @@ es:
         taken: Un modelo con ese nombre y marca ya existe
     companies:
       attributes:
-        wrong_company_images_format: Formato de imagen incorrecto. Debe ser un JPG, PNG o JPEG
-        wrong_company_charter_format: Formato de acta constitutiva incorrecto. Debe ser un PDF
-        image_size_exceeded: Tamaño de imagen excedido, debe ser menor a 5MB
       errors:
         wrong_company_images_format: Formato de imagen incorrecto. Debe ser un JPG, PNG o JPEG
         wrong_company_charter_format: Formato de acta constitutiva incorrecto. Debe ser un PDF
@@ -116,7 +115,10 @@ es:
         error_trying_to_attach_images: Error trying to attach images
         error_trying_to_attach_charter: Error trying to attach charter
         user_is_required: Se requiere un usuario
-    company_creation_requests:
+        wrong_location_type: Tipo de ubicación incorrecto, debe ser un municipio
+        unique_dni: Número de identificación ya se encuentra registrado
+        unique_email: Email ya se encuentra registrado
+    users_companies_requests:
       errors:
         company_id_required: Id de la compañía es requerido
         responder_id_required: Id del respondiente es requerido
@@ -126,3 +128,9 @@ es:
         request_created: Solicitud creada exitosamente
         approved_request: Solicitud aprobada exitosamente
         rejected_request: Solicitud rechazada exitosamente
+    user_company:
+      errors:
+        roles: Roles must be one of admin, superadmin, general, supervisor or technical
+        another_user_already_requested: Otro usuario ya solicitó la creación de esta compañía
+        user_required: Un usuario es requerido
+        company_required: Una compañía es requerido

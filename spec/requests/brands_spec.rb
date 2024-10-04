@@ -2,19 +2,15 @@ require 'rails_helper'
 
 RSpec.describe 'Brands' do
   let!(:brand) { create(:brand, :valid_brand) }
-  let!(:headers) { { 'Accept' => 'application/json', 'Content-Type' => 'application/json' } }
+  let!(:headers) { { 'Accept' => 'application/json' } }
   let(:user) { create(:user, :with_valid_attr) }
-  let(:not_a_superadmin) do
-    create(:user, :with_valid_attr, roles: %w[general admin supervisor technical])
-  end
-  let(:superadmin) do
-    create(:user, :with_valid_attr, roles: %w[superadmin])
-  end
+  let(:not_a_superadmin) { create(:user_company, :valid_admin) }
+  let(:superadmin) { create(:user_company, :valid_superadmin) }
   let!(:auth_headers) { Devise::JWT::TestHelpers.auth_headers(headers, user) }
 
   describe 'GET #index' do
     it 'returns a success response' do
-      get(api_v1_brands_path,
+      get(api_v1_super_admin_brands_path,
           headers:)
       expect(response).to be_successful
     end
@@ -22,7 +18,7 @@ RSpec.describe 'Brands' do
 
   describe 'GET #show' do
     it 'returns a success response' do
-      get(api_v1_brands_path(brand),
+      get(api_v1_super_admin_brands_path(brand),
           headers:)
       expect(response).to be_successful
     end
@@ -31,36 +27,39 @@ RSpec.describe 'Brands' do
   describe 'PUT #update' do
     context 'with not a valid user' do
       it 'returns an unauthorized' do
-        put(api_v1_brand_path(brand),
+        put(api_v1_super_admin_brand_path(brand),
             params: {
-              brand: { name: 'Shangan' }
-            }.to_json,
-            headers: Devise::JWT::TestHelpers.auth_headers(headers, not_a_superadmin))
-        json_response = JSON.parse(response.body, symbolize_names: true)
-        expect(json_response[:status]).to eq 'unauthorized'
+              brand: { name: 'Shangan' },
+              company_id: not_a_superadmin.company_id
+            },
+            headers: Devise::JWT::TestHelpers.auth_headers(headers, not_a_superadmin.user))
+        expect(response).to have_http_status(:unauthorized)
       end
     end
+
     context 'with a valid user' do
       it 'returns sucess' do
-        put(api_v1_brand_path(brand),
+        put(api_v1_super_admin_brand_path(brand),
             params: {
-              brand: { name: 'Shangan' }
-            }.to_json,
-            headers: Devise::JWT::TestHelpers.auth_headers(headers, superadmin))
-        expect(response).to be_successful
+              brand: { name: 'Shangan' },
+              company_id: superadmin.company_id
+            },
+            headers: Devise::JWT::TestHelpers.auth_headers(headers, superadmin.user))
+        expect(response).to have_http_status(:ok)
       end
     end
   end
 
-  describe 'POST #create.rb' do
-    let(:brand) { create(:brand, :valid_brand) }
+  describe 'POST #create' do
+    let(:brand) { build(:brand, :valid_brand) }
     it 'returns a success response' do
-      post(api_v1_brands_path,
+      post(api_v1_super_admin_brands_path,
            params: {
-             brand:
-           }.to_json,
-           headers:)
-      expect(response).to be_successful
+             brand: brand.attributes,
+             company_id: superadmin.company_id
+           },
+           headers: Devise::JWT::TestHelpers.auth_headers(headers, superadmin.user))
+      expect(response).to have_http_status(:ok)
     end
   end
 end

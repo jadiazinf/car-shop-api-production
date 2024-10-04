@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_09_14_202616) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_27_163443) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -54,27 +54,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_14_202616) do
     t.string "name", null: false
     t.string "dni", null: false
     t.string "email", null: false
-    t.integer "number_of_employees", default: 1, null: false
+    t.integer "number_of_employees", default: 0, null: false
     t.string "payment_methods", default: [], null: false, array: true
     t.string "social_networks", default: [], null: false, array: true
-    t.string "phonenumbers", default: [], null: false, array: true
+    t.string "phone_numbers", default: [], null: false, array: true
     t.string "address", null: false
     t.boolean "is_active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "location_id"
+    t.index ["dni"], name: "unique_company_dni", unique: true
+    t.index ["email"], name: "unique_company_email", unique: true
     t.index ["location_id"], name: "index_companies_on_location_id"
-  end
-
-  create_table "company_creation_requests", force: :cascade do |t|
-    t.string "status", default: "pending", null: false
-    t.string "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "company_id", null: false
-    t.bigint "responder_user_id"
-    t.index ["company_id"], name: "index_company_creation_requests_on_company_id"
-    t.index ["responder_user_id"], name: "index_company_creation_requests_on_responder_user_id"
   end
 
   create_table "jwt_denylist", force: :cascade do |t|
@@ -114,20 +105,39 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_14_202616) do
     t.string "gender", null: false
     t.date "birthdate", null: false
     t.string "address"
-    t.string "phonenumber"
-    t.string "roles", default: ["general"], array: true
+    t.string "phone_number"
     t.boolean "is_active", default: true, null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "company_id"
-    t.index ["company_id"], name: "index_users_on_company_id"
+    t.bigint "location_id", null: false
     t.index ["dni"], name: "unique_user_dni", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["email"], name: "unique_user_email", unique: true
+    t.index ["location_id"], name: "index_users_on_location_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  create_table "users_companies", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "company_id", null: false
+    t.string "roles", default: ["admin"], array: true
+    t.boolean "is_active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_users_companies_on_company_id"
+    t.index ["user_id"], name: "index_users_companies_on_user_id"
+  end
+
+  create_table "users_companies_requests", force: :cascade do |t|
+    t.string "status", default: "pending", null: false
+    t.string "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "users_companies_id", null: false
+    t.index ["users_companies_id"], name: "index_users_companies_requests_on_users_companies_id"
   end
 
   create_table "vehicles", force: :cascade do |t|
@@ -158,11 +168,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_14_202616) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "companies", "locations"
-  add_foreign_key "company_creation_requests", "companies"
-  add_foreign_key "company_creation_requests", "users", column: "responder_user_id"
   add_foreign_key "locations", "locations", column: "parent_location_id"
   add_foreign_key "models", "brands"
-  add_foreign_key "users", "companies"
+  add_foreign_key "users", "locations"
+  add_foreign_key "users_companies", "companies"
+  add_foreign_key "users_companies", "users"
+  add_foreign_key "users_companies_requests", "users_companies", column: "users_companies_id"
   add_foreign_key "vehicles", "models"
   add_foreign_key "vehicles", "users"
 end

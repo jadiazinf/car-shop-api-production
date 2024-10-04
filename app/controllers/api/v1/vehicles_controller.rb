@@ -30,7 +30,8 @@ class Api::V1::VehiclesController < ApplicationController
   def vehicle_params
     params.require(:vehicle).permit(:license_plate, :year, :axles, :tires, :color, :vehicle_type,
                                     :load_capacity, :mileage, :engine_serial, :body_serial,
-                                    :engine_type, :transmission, :is_active, :user_id, :model_id)
+                                    :engine_type, :transmission, :is_active, :user_id, :model_id,
+                                    :vehicle_images)
   end
 
   def render_response(obj)

@@ -44,9 +44,12 @@ gem 'devise-jwt'
 
 gem 'jsonapi-serializer'
 
+gem 'rubyzip'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'bullet'
+  gem 'database_cleaner', '~> 2.0'
   gem 'debug', platforms: %i[mri windows]
   gem 'factory_bot_rails'
   gem 'faker'

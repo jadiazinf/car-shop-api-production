@@ -11,7 +11,7 @@ RSpec.describe Location do
         expect(errors.include?(message)).to be true
       end
     end
-    context 'with location_type invalid' do
+    context 'with location type invalid' do
       let(:invalid_location) { build(:location, :invalid) }
       it 'Wrong value for locations type' do
         invalid_location.save
@@ -30,8 +30,8 @@ RSpec.describe Location do
     end
   end
 
-  context 'when location_type value is nil' do
-    context 'location_type is different from country' do
+  context 'when location type value is nil' do
+    context 'location type is different from country' do
       let(:state) { build(:location, :state) }
       let(:city) { build(:location, :city) }
       it 'state object should not be valid without parent_location_id' do
@@ -47,7 +47,7 @@ RSpec.describe Location do
         expect(errors.include?(message)).to be true
       end
     end
-    context 'location_type is country' do
+    context 'type is country' do
       let(:location) { build(:location, location_type: 'country') }
       it 'should be valid without parent_location_id' do
         expect(location).to be_valid

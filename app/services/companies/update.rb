@@ -54,7 +54,7 @@ class Companies::Update
   end
 
   def create_request_for_company_creation
-    company_creation_request = CompanyCreationRequests::Create.new(company_id: @company.id)
+    company_creation_request = UsersCompaniesRequests::Create.new(company_id: @company.id)
     company_creation_request.perform
   end
 end

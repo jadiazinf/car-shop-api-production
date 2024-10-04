@@ -5,7 +5,10 @@ class User < ApplicationRecord
 
   has_many :vehicles, dependent: :nullify
 
-  belongs_to :company, optional: true
+  has_many :user_companies, dependent: :destroy
+  has_many :companies, through: :user_companies
+
+  belongs_to :location
 
   validates :email, presence: { message: I18n.t('active_record.users.errors.email') },
                     uniqueness: { message: I18n.t('active_record.users.errors.unique_email') }
@@ -27,9 +30,12 @@ class User < ApplicationRecord
                      inclusion: { in: %w[Male Female],
                                   message: I18n.t('active_record.users.errors.gender_value') }
   validates :birthdate, presence: { message: I18n.t('active_record.users.errors.birthdate') }
-  validates :roles,
-            inclusion: { in: %w[admin general superadmin supervisor technical],
-                         message: I18n.t('active_record.users.errors.invalid_role') }
+
+  validate :validate_location
+
+  def roles(company_id)
+    UserCompany.where(user_id: id, company_id:).first.roles
+  end
 
   private
 
@@ -37,5 +43,13 @@ class User < ApplicationRecord
     return false unless password.present? && password != password_confirmation
 
     errors.add(:password_confirmation, I18n.t('active_record.users.errors.password_not_match'))
+  end
+
+  def validate_location
+    location = Location.find(location_id)
+    if location.location_type != 'town'
+      errors.add(:location_id, I18n.t('active_record.users.errors.invalid_location_type'))
+    end
+    false
   end
 end
