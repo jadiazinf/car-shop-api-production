@@ -1,13 +1,14 @@
 class Api::V1::SuperAdmin::BrandsController < ApplicationController
   before_action :authenticate_user!, only: %i[update]
   before_action :authorize_superadmin!, only: %i[update create]
+
   def index
     brands = Brand.where(is_active: true)
     render_response(ok: true, status: :ok, data: brands, message: nil, errors: nil)
   end
 
   def show
-    brand = Brand.find(brand_params[:id])
+    brand = Brand.find(params[:id])
     render_response(ok: true, status: :ok, data: brand, message: nil, errors: nil)
   end
 

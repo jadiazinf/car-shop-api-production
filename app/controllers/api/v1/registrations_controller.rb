@@ -14,7 +14,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
       configure_header
       render_success_response(resource)
     else
-      render_bad_request(resource.errors)
+      render_bad_request(resource.errors.full_messages)
     end
   rescue StandardError
     render_internal_server_error(I18n.t('active_record.errors.standard_error'))
@@ -32,7 +32,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
 
   def render_response(obj)
     render 'application_response',
-           status: :ok,
+           status: obj[:status],
            locals: { ok: obj[:ok], status: obj[:status], data: obj[:data], message: obj[:message],
                      errors: obj[:errors] }
   end

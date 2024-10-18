@@ -8,7 +8,6 @@ class UsersCompaniesRequests::Create
 
   def perform
     request = UserCompanyRequest.new(company_id:)
-    request.save
     if request.save
       { success: true, request: }
     else

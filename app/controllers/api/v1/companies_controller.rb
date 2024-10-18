@@ -2,7 +2,7 @@ class Api::V1::CompaniesController < ApplicationController
   before_action :authenticate_user!, unless: :devise_controller?,
                                      only: %i[show create update roles_by_company]
   before_action :authorize_admin!, only: %i[update]
-  before_action :set_user, :set_location, only: %i[create]
+  before_action :set_location, only: %i[create]
   before_action :set_company, only: %i[show update company_charter company_images roles_by_company]
 
   def index
@@ -17,9 +17,10 @@ class Api::V1::CompaniesController < ApplicationController
   end
 
   def create
+    user = User.find(company_params[:user_id])
     service = Companies::Create.new(company_params
                                                   .except(:location_id, :user_id)
-                                                  .merge(users: [@user], location: @location))
+                                                  .merge(users: [user], location: @location))
     response = service.perform
     if response[:ok]
       render json: { response: }, status: :created
@@ -77,10 +78,10 @@ class Api::V1::CompaniesController < ApplicationController
   end
 
   def company_params
-    params.require(:company).permit(:name, :dni, :email, :number_of_employees,
-                                    :address, :location_id, :company_charter, :disposition,
-                                    payment_methods: [], social_networks: [],
-                                    phone_numbers: [], company_images: [], user_ids: [])
+    params.permit(:name, :dni, :email, :number_of_employees,
+                  :address, :location_id, :company_charter, :disposition,
+                  :user_id, payment_methods: [], social_networks: [],
+                            phone_numbers: [], company_images: [])
   end
 
   def user_params

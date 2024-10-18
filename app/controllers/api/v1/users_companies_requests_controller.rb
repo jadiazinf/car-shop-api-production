@@ -1,9 +1,9 @@
 class Api::V1::UsersCompaniesRequestsController < ApplicationController
   def index
     @requests = if params[:status].present?
-                  CompanyCreationRequest.where(status: params[:status]).page(params[:page].to_i)
+                  UserCompanyRequest.where(status: params[:status]).page(params[:page].to_i)
                 else
-                  CompanyCreationRequest.page(params[:page].to_i)
+                  UserCompanyRequest.page(params[:page].to_i)
                 end
   end
 

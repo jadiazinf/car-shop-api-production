@@ -49,7 +49,7 @@ class Api::V1::SessionsController < Devise::SessionsController
 
   def render_response(obj)
     render 'application_response',
-           status: :ok,
+           status: obj[:status],
            locals: { ok: obj[:ok], status: obj[:status], data: obj[:data], message: obj[:message],
                      errors: obj[:errors] }
   end

@@ -1,4 +1,5 @@
 class UserCompanyRequest < ApplicationRecord
+  self.table_name = 'users_companies_requests'
   belongs_to :user, optional: true
   belongs_to :company
 
