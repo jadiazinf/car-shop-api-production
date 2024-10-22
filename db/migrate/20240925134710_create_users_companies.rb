@@ -7,5 +7,7 @@ class CreateUsersCompanies < ActiveRecord::Migration[7.1]
       t.boolean :is_active, null: false, default: true
       t.timestamps
     end
+
+    add_index :users_companies, %i[user_id company_id], unique: true
   end
 end

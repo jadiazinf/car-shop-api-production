@@ -28,7 +28,7 @@ class ApplicationController < ActionController::API
   end
 
   def authorize_admin!
-    user_roles = current_user.roles(params[:company_id])
+    user_roles = current_user.roles(params[:id])
     return if user_roles.include?('admin')
 
     render_unauthorized(nil)

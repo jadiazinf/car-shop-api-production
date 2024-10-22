@@ -1,14 +1,11 @@
 class Companies::Update
   def initialize(params)
     @params = params
+    @user = params[:user]
+    @company = params[:company]
   end
 
   def perform
-    unless validate_company_id
-      return { ok: false, data: nil,
-               errors: [I18n.t('active_record.errors.general.id_is_required')] }
-    end
-
     update_company_charter if @params[:company_charter].present?
     save_company_images if @params[:company_images].present?
     update_company
@@ -18,15 +15,8 @@ class Companies::Update
 
   private
 
-  def validate_company_id
-    return false if @params[:id].blank? || @params[:id].nil?
-
-    @company = Company.find(@params[:id])
-    true
-  end
-
   def update_company
-    @company.update(@params.except(:users))
+    @company.update(@params.except(:user, :company))
   end
 
   def purge_old_charter
@@ -54,7 +44,10 @@ class Companies::Update
   end
 
   def create_request_for_company_creation
-    company_creation_request = UsersCompaniesRequests::Create.new(company_id: @company.id)
+    user_company = UserCompany.find_by(company_id: @company.id, user_id: @user.id)
+    return unless user_company
+
+    company_creation_request = UsersCompaniesRequests::Create.new(user_company_id: user_company.id)
     company_creation_request.perform
   end
 end

@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_many :user_companies, dependent: :destroy
   has_many :companies, through: :user_companies
 
+  has_many :user_company_requests, inverse_of: :user, dependent: :nullify
+
   belongs_to :location
 
   validates :email, presence: { message: I18n.t('active_record.users.errors.email') },

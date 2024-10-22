@@ -128,6 +128,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_27_163443) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_users_companies_on_company_id"
+    t.index ["user_id", "company_id"], name: "index_users_companies_on_user_id_and_company_id", unique: true
     t.index ["user_id"], name: "index_users_companies_on_user_id"
   end
 
@@ -136,8 +137,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_27_163443) do
     t.string "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "users_companies_id", null: false
-    t.index ["users_companies_id"], name: "index_users_companies_requests_on_users_companies_id"
+    t.bigint "user_company_id", null: false
+    t.bigint "responder_user_id"
+    t.index ["responder_user_id"], name: "index_users_companies_requests_on_responder_user_id"
+    t.index ["user_company_id"], name: "index_users_companies_requests_on_user_company_id"
   end
 
   create_table "vehicles", force: :cascade do |t|
@@ -173,7 +176,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_09_27_163443) do
   add_foreign_key "users", "locations"
   add_foreign_key "users_companies", "companies"
   add_foreign_key "users_companies", "users"
-  add_foreign_key "users_companies_requests", "users_companies", column: "users_companies_id"
+  add_foreign_key "users_companies_requests", "users", column: "responder_user_id"
+  add_foreign_key "users_companies_requests", "users_companies", column: "user_company_id"
   add_foreign_key "vehicles", "models"
   add_foreign_key "vehicles", "users"
 end

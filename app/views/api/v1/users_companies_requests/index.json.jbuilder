@@ -5,5 +5,6 @@ json.total_pages @requests.total_pages
 json.total_count @requests.total_count
 
 json.data do
-  json.array! @requests, :id, :status, :message, :created_at, :updated_at, :company_id
+  json.array! @requests, :id, :status, :message, :user, :company, :created_at,
+              :updated_at
 end

@@ -1,13 +1,10 @@
 class UsersCompaniesRequests::Create
-  attr_reader :company_id
-
   def initialize(params)
-    @company_id = params[:company_id]
-    validate_params
+    @user_company_id = params[:user_company_id]
   end
 
   def perform
-    request = UserCompanyRequest.new(company_id:)
+    request = UserCompanyRequest.new(user_company_id: @user_company_id)
     if request.save
       { success: true, request: }
     else
@@ -15,14 +12,5 @@ class UsersCompaniesRequests::Create
     end
   rescue StandardError => e
     { success: false, error: e.message }
-  end
-
-  private
-
-  def validate_params
-    return if company_id
-
-    raise ArgumentError,
-          I18n.t('active_record.users_companies_requests.errors.company_id_required')
   end
 end

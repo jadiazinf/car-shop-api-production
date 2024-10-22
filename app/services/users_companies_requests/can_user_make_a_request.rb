@@ -1,11 +1,13 @@
 class UsersCompaniesRequests::CanUserMakeARequest
   def initialize(params)
-    @user = User.find(params[:user_id])
-    @company = Company.find(@user.company_id)
+    @company_id = params[:company_id]
+    @user_id = params[:user_id]
+    @user_company = UserCompany.where(user_id: params[:user_id],
+                                      company_id: params[:company_id]).first
   end
 
   def perform
-    return false unless @user.roles.include?('admin')
+    return false unless @user_company.roles.include?('admin')
 
     last_request = find_last_request
     last_request.status == 'rejected'
@@ -14,7 +16,9 @@ class UsersCompaniesRequests::CanUserMakeARequest
   private
 
   def find_last_request
-    UserCompanyRequest.where(company_id: @company.id)
+    UserCompanyRequest
+      .joins(user_company: :company)
+      .where(companies: { id: @company_id })
       .order(created_at: :desc)
       .first
   end

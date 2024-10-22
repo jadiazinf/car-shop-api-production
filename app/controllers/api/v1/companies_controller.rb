@@ -4,6 +4,7 @@ class Api::V1::CompaniesController < ApplicationController
   before_action :authorize_admin!, only: %i[update]
   before_action :set_location, only: %i[create]
   before_action :set_company, only: %i[show update company_charter company_images roles_by_company]
+  before_action :allow_iframe, only: %i[company_charter company_images]
 
   def index
     companies = Company.all
@@ -17,10 +18,10 @@ class Api::V1::CompaniesController < ApplicationController
   end
 
   def create
-    user = User.find(company_params[:user_id])
+    user = current_user
     service = Companies::Create.new(company_params
-                                                  .except(:location_id, :user_id)
-                                                  .merge(users: [user], location: @location))
+                                                  .except(:location_id)
+                                                  .merge(user:, location: @location))
     response = service.perform
     if response[:ok]
       render json: { response: }, status: :created
@@ -30,7 +31,7 @@ class Api::V1::CompaniesController < ApplicationController
   end
 
   def update
-    service = Companies::Update.new(company_params.merge(id: params[:id]))
+    service = Companies::Update.new(company_params.merge(company: @company, user: current_user))
     response = service.perform
     if response[:ok]
       render json: { response: }, status: :ok
@@ -45,30 +46,18 @@ class Api::V1::CompaniesController < ApplicationController
     render json: { error: e.message }, status: :not_found
   end
 
-  def company_charter
-    if @company.company_charter.attached?
-      send_data @company.company_charter.download,
-                filename: @company.company_charter.filename.to_s,
-                type: @company.company_charter.content_type,
-                disposition: params[:disposition] == 'inline' ? 'inline' : 'attachment'
-    else
-      render json: { error: 'Company charter not found' }, status: :not_found
-    end
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
+  def company_images
+    company = Company.find(params[:id])
+    image_urls = company.company_images.map { |image| url_for(image) }
+
+    render json: { image_urls: }
   end
 
-  def company_images
-    service = Companies::DownloadImages.new(@company)
-    result = service.perform
+  def company_charter
+    company = Company.find(params[:id])
+    company_charter_url = url_for(company.company_charter)
 
-    if result[:ok]
-      send_zip_file(result[:data])
-    else
-      render_error(result[:message])
-    end
-  rescue ActiveRecord::RecordNotFound => e
-    render_error(e.message)
+    render json: { company_charter_url: }
   end
 
   private
@@ -80,8 +69,8 @@ class Api::V1::CompaniesController < ApplicationController
   def company_params
     params.permit(:name, :dni, :email, :number_of_employees,
                   :address, :location_id, :company_charter, :disposition,
-                  :user_id, payment_methods: [], social_networks: [],
-                            phone_numbers: [], company_images: [])
+                  payment_methods: [], social_networks: [],
+                  phone_numbers: [], company_images: [])
   end
 
   def user_params
@@ -106,5 +95,9 @@ class Api::V1::CompaniesController < ApplicationController
 
   def render_error(message)
     render json: { error: message }, status: :not_found
+  end
+
+  def allow_iframe
+    response.headers['X-Frame-Options'] = 'ALLOWALL'
   end
 end

@@ -14,16 +14,14 @@ RSpec.describe 'Companies' do
       context 'with valid params' do
         let(:params) do
           {
-            company: {
-              name: company.name,
-              dni: company.dni,
-              email: company.email,
-              address: company.address,
-              location_id: location.id,
-              user_ids: [user.id],
-              company_charter: fixture_file_upload('company_charter.pdf', 'application/pdf'),
-              company_images: [fixture_file_upload('image.jpg', 'image/jpeg')]
-            },
+            name: company.name,
+            dni: company.dni,
+            email: company.email,
+            address: company.address,
+            location_id: location.id,
+            user_ids: [user.id],
+            company_charter: fixture_file_upload('company_charter.pdf', 'application/pdf'),
+            company_images: [fixture_file_upload('image.jpg', 'image/jpeg')],
             user: user.attributes
           }
         end
@@ -45,11 +43,11 @@ RSpec.describe 'Companies' do
         patch(
           api_v1_company_path(id: admin.company_id),
           headers: auth_headers,
-          params: { company: {
+          params: {
             name: 'New Name',
             company_charter: fixture_file_upload('company_charter.pdf', 'application/pdf'),
             company_images: [fixture_file_upload('image.jpg', 'image/jpeg')]
-          }, company_id: admin.company_id }
+          }
         )
         expect(response).to have_http_status(:ok)
       end

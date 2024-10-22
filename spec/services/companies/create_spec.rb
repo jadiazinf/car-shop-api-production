@@ -57,7 +57,7 @@ RSpec.describe Companies::Create do
         email: valid_params[:email],
         address: valid_params[:address],
         location: create(:location, :valid_town),
-        users: [create(:user, :with_valid_attr)],
+        user: create(:user, :with_valid_attr),
         company_charter: fixture_file_upload('company_charter.pdf', 'application/pdf'),
         company_images: [fixture_file_upload('image.jpg', 'image/jpg')]
       }

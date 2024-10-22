@@ -1,7 +1,9 @@
 class UserCompanyRequest < ApplicationRecord
   self.table_name = 'users_companies_requests'
-  belongs_to :user, optional: true
-  belongs_to :company
+  belongs_to :user_company
+  belongs_to :user, foreign_key: :responder_user_id, inverse_of: :user_company_requests
+  delegate :user, to: :user_company
+  delegate :company, to: :user_company
 
   validates :status,
             presence: {

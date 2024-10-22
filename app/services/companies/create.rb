@@ -1,52 +1,77 @@
 class Companies::Create
   def initialize(params)
     @params = params
+    @user = nil
+    @company = nil
   end
 
   def perform
+    validate_user
+    return handle_errors if @company&.errors&.any?
+
     create_company
-    save_company_charter unless @company.errors.any?
-    save_company_images unless @company.errors.any?
-    create_request_for_company_creation unless @company.errors.any?
-    { ok: @company.errors.empty?, data: @company, errors: @company.errors }
+    return handle_errors if @company.errors.any?
+
+    process_company_files
+    request = add_creation_request_for_company unless @company.errors.any?
+
+    build_response(request)
   end
 
   private
 
-  def create_company
-    @company = Company.new(@params)
-    return unless @company.valid?
-
-    validate_user
-    return unless @company.errors.empty?
-
-    @company.save
+  def handle_errors
+    { ok: false, errors: @company.errors }
   end
 
   def validate_user
-    if @params[:users].blank?
+    if @params[:user].blank?
+      @company = Company.new
       @company.errors.add(:users, I18n.t('active_record.companies.errors.user_is_required'))
       return
     end
-    @user = User.find(@params[:users][0].id)
-    return unless @user.nil?
 
-    @company.errors.add(:users, I18n.t('active_record.users.errors.user_not_found'))
+    @user = @params[:user]
+  end
+
+  def create_company
+    @company = Company.new(@params.except(:user))
+    @company.user_ids = [@user.id]
+
+    @company.save if @company.valid?
+  end
+
+  def process_company_files
+    save_company_charter
+    save_company_images
   end
 
   def save_company_charter
+    return if @params[:company_charter].blank?
+
     @company.company_charter.attach(@params[:company_charter])
     @company.save
   end
 
   def save_company_images
+    return if @params[:company_images].blank?
+
     @params[:company_images].each do |image|
       @company.company_images.attach(image)
     end
+    @company.save
   end
 
-  def create_request_for_company_creation
-    company_creation_request = UsersCompaniesRequests::Create.new(company_id: @company.id)
+  def add_creation_request_for_company
+    user_company = UserCompany.find_by(company_id: @company.id, user_id: @user.id)
+    return unless user_company
+
+    company_creation_request = UsersCompaniesRequests::Create.new(user_company_id: user_company.id)
     company_creation_request.perform
+  end
+
+  def build_response(request)
+    { ok: @company.errors.empty? && request&.dig(:success), data: @company,
+      errors: @company.errors || request&.dig(:errors) }
   end
 end

@@ -1,44 +1,52 @@
 class Api::V1::UsersCompaniesRequestsController < ApplicationController
-  def index
+  def index # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     @requests = if params[:status].present?
-                  UserCompanyRequest.where(status: params[:status]).page(params[:page].to_i)
+                  UserCompanyRequest
+                    .includes(user_company: %i[user company])
+                    .where(status: params[:status])
+                    .order(created_at: :desc)
+                    .page(params[:page].to_i)
                 else
-                  UserCompanyRequest.page(params[:page].to_i)
+                  UserCompanyRequest
+                    .includes(user_company: %i[user company])
+                    .order(created_at: :desc)
+                    .page(params[:page].to_i)
                 end
   end
 
   def show
-    company_creation_request = UserCompanyRequest.find(params[:id])
-    render json: company_creation_request, status: :ok
+    @request = UserCompanyRequest.includes(user_company: { user: [], company: [:location] })
+      .find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
     render json: { error: e.message }, status: :not_found
   end
 
   def show_by_company_id
-    @company_creation_request = if params[:status].present?
-                                  company_creation_requests_by_status
-                                else
-                                  all_company_creation_requests
-                                end
+    @requests = if params[:status].present?
+                  company_creation_requests_by_status
+                else
+                  all_company_creation_requests
+                end
   rescue ActiveRecord::RecordNotFound => e
     render json: { error: e.message }, status: :not_found
   end
 
   def update
     id = params[:id]
-    service = UserCompanyRequest::Update.new(company_creation_request_params.merge(id:))
+    service = UsersCompaniesRequests::Update.new(company_creation_request_params.merge(id:))
     service.perform
     render_success
   rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
+    render json: [error: e.message], status: :not_found
   rescue ActiveRecord::RecordInvalid => e
-    render json: { error: e.message }, status: :unprocessable_content
+    render json: [e.message.full_messages], status: :unprocessable_content
   rescue ArgumentError => e
-    render json: { error: e.message }, status: :bad_request
+    render json: [e.message], status: :bad_request
   end
 
   def can_user_make_a_request
-    service = UserCompanyRequest::CanUserMakeARequest.new({ user_id: params[:user_id] })
+    service = UsersCompaniesRequests::CanUserMakeARequest.new({ user_id: params[:user_id],
+                                                                company_id: params[:company_id] })
     result = service.perform
     render json: { can_make_request: result }, status: :ok
   rescue ActiveRecord::RecordNotFound => e
@@ -53,18 +61,22 @@ class Api::V1::UsersCompaniesRequestsController < ApplicationController
   end
 
   def company_creation_request_params
-    params.require(:company_creation_request).permit(:company_id, :responder_user_id, :status,
-                                                     :message, :page, :status)
+    params.require(:user_company_request).permit(:company_id, :responder_user_id, :status,
+                                                 :message, :page, :status)
   end
 
   def all_company_creation_requests
-    UserCompanyRequest.where(company_id: params[:id])
+    UserCompanyRequest
+      .includes(user_company: %i[user company])
+      .where(company_id: params[:id])
       .order(created_at: :desc)
       .page(params[:page].to_i)
   end
 
   def company_creation_requests_by_status
-    UserCompanyRequest.where(company_id: params[:id], status: params[:status])
+    UserCompanyRequest
+      .includes(user_company: %i[user company])
+      .where(user_company: { company_id: params[:id] }, status: params[:status])
       .order(created_at: :desc)
       .page(params[:page].to_i)
   end
