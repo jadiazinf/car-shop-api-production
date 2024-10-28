@@ -1,5 +1,5 @@
-FactoryBot.define do # rubocop:disable Metrics/BlockLength
-  factory :vehicle do # rubocop:disable Metrics/BlockLength
+FactoryBot.define do
+  factory :vehicle do
     year { Time.zone.now.year }
     color { Faker::Vehicle.color }
     license_plate { Faker::Vehicle.license_plate }
@@ -13,7 +13,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     axles { 2 }
     tires { 4 }
     after(:build) do |vehicle|
-      vehicle.model = create(:model, :valid_model)
+      vehicle.model = create(:model)
       vehicle.user = create(:user, :registration)
     end
 

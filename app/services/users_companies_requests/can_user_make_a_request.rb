@@ -1,9 +1,7 @@
 class UsersCompaniesRequests::CanUserMakeARequest
   def initialize(params)
-    @company_id = params[:company_id]
+    @user_company = UserCompany.includes(:company).find(params[:user_company_id])
     @user_id = params[:user_id]
-    @user_company = UserCompany.where(user_id: params[:user_id],
-                                      company_id: params[:company_id]).first
   end
 
   def perform
@@ -18,7 +16,7 @@ class UsersCompaniesRequests::CanUserMakeARequest
   def find_last_request
     UserCompanyRequest
       .joins(user_company: :company)
-      .where(companies: { id: @company_id })
+      .where(companies: { id: @user_company.company.id })
       .order(created_at: :desc)
       .first
   end

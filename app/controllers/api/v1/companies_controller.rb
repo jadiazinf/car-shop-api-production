@@ -18,10 +18,9 @@ class Api::V1::CompaniesController < ApplicationController
   end
 
   def create
-    user = current_user
     service = Companies::Create.new(company_params
                                                   .except(:location_id)
-                                                  .merge(user:, location: @location))
+                                                  .merge(user: current_user, location: @location))
     response = service.perform
     if response[:ok]
       render json: { response: }, status: :created

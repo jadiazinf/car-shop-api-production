@@ -1,8 +1,6 @@
 FactoryBot.define do
   factory :user_company_request do
-    association :user_company
-
-    trait :valid_request do
+    trait :pending_request do
       status { 'pending' }
       message { nil }
       responder_user_id { nil }
@@ -16,9 +14,17 @@ FactoryBot.define do
     end
 
     trait :approved_request do
-      id { 1 }
       status { 'approved' }
       message { 'Approved' }
+    end
+
+    trait :rejected_request do
+      status { 'rejected' }
+      message { 'Rejected' }
+    end
+
+    after(:build) do |user_company_request|
+      user_company_request.user_company = create(:user_company, :valid_admin)
     end
   end
 end

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user_company do
-    association :user, factory: %i[user registration], strategy: :create
-    association :company, factory: :company, strategy: :create
+    user factory: %i[user registration], strategy: :create
+    company factory: %i[company], strategy: :create
 
     trait :invalid_role do
       roles { ['whatever'] }
@@ -24,9 +24,3 @@ FactoryBot.define do
     end
   end
 end
-
-# after(:build) do |user_company|
-#   company = create(:company)
-#   user_company.company = company
-#   user_company.user = company.users.first
-# end

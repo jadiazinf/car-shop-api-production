@@ -30,14 +30,14 @@ class Vehicle < ApplicationRecord
 
   validate :vehicle_images_format
 
-  enum vehicle_type: {
+  enum :vehicle_type, {
     third_type: I18n.t('active_record.vehicles.attributes.vehicle_type.third'),
     fourth_type: I18n.t('active_record.vehicles.attributes.vehicle_type.fourth'),
     fith_type: I18n.t('active_record.vehicles.attributes.vehicle_type.fith'),
     tsp: I18n.t('active_record.vehicles.attributes.vehicle_type.tsp')
   }
 
-  enum engine_type: {
+  enum :engine_type, {
     diesel: I18n.t('active_record.vehicles.attributes.engine_types.diesel'),
     gas: I18n.t('active_record.vehicles.attributes.engine_types.gas'),
     gasoline: I18n.t('active_record.vehicles.attributes.engine_types.gasoline'),
@@ -45,7 +45,7 @@ class Vehicle < ApplicationRecord
     hybrid: I18n.t('active_record.vehicles.attributes.engine_types.hybrid')
   }
 
-  enum transmission: {
+  enum :transmission, {
     manual: I18n.t('active_record.vehicles.attributes.transmissions.manual'),
     automatic: I18n.t('active_record.vehicles.attributes.transmissions.automatic'),
     cvt: I18n.t('active_record.vehicles.attributes.transmissions.cvt'),

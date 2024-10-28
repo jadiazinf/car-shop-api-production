@@ -23,9 +23,9 @@ class Api::V1::UsersCompaniesRequestsController < ApplicationController
 
   def show_by_company_id
     @requests = if params[:status].present?
-                  company_creation_requests_by_status
+                  company_requests_by_status
                 else
-                  all_company_creation_requests
+                  all_company_requests
                 end
   rescue ActiveRecord::RecordNotFound => e
     render json: { error: e.message }, status: :not_found
@@ -61,11 +61,11 @@ class Api::V1::UsersCompaniesRequestsController < ApplicationController
   end
 
   def company_creation_request_params
-    params.require(:user_company_request).permit(:company_id, :responder_user_id, :status,
+    params.require(:user_company_request).permit(:user_company_id, :responder_user_id, :status,
                                                  :message, :page, :status)
   end
 
-  def all_company_creation_requests
+  def all_company_requests
     UserCompanyRequest
       .includes(user_company: %i[user company])
       .where(company_id: params[:id])
@@ -73,7 +73,7 @@ class Api::V1::UsersCompaniesRequestsController < ApplicationController
       .page(params[:page].to_i)
   end
 
-  def company_creation_requests_by_status
+  def company_requests_by_status
     UserCompanyRequest
       .includes(user_company: %i[user company])
       .where(user_company: { company_id: params[:id] }, status: params[:status])

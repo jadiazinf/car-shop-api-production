@@ -1,5 +1,5 @@
-FactoryBot.define do # rubocop:disable Metrics/BlockLength
-  factory :user do # rubocop:disable Metrics/BlockLength
+FactoryBot.define do
+  factory :user do
     trait :with_invalid_attr do
       email { nil }
       password { '64544564' }
@@ -11,6 +11,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       is_active { nil }
       gender { nil }
     end
+
     trait :with_valid_attr do
       email { Faker::Internet.email }
       password { Faker::Internet.password }
@@ -24,6 +25,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
       phone_number { Faker::PhoneNumber.cell_phone }
       gender { Faker::Gender.binary_type }
     end
+
     trait :registration do
       email { Faker::Internet.email }
       password { Faker::Internet.password }
@@ -38,7 +40,7 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     end
 
     after(:build) do |user|
-      user.location = create(:location, :valid_town)
+      user.location = create(:location)
     end
   end
 end

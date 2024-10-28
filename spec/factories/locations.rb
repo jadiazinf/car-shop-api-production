@@ -1,8 +1,8 @@
-FactoryBot.define do # rubocop:disable Metrics/BlockLength
-  factory :location do # rubocop:disable Metrics/BlockLength
+FactoryBot.define do
+  factory :location do
     name { Faker::Address.country }
-    location_type { 'country' }
-    parent_location_id { nil }
+    location_type { 'town' }
+    parent_location_id { create(:location, :city).id }
 
     trait :invalid do
       name { nil }
@@ -13,43 +13,19 @@ FactoryBot.define do # rubocop:disable Metrics/BlockLength
     trait :state do
       name { Faker::Address.state }
       location_type { 'state' }
-      parent_location_id { nil }
+      parent_location_id { create(:location, :country).id }
     end
 
     trait :city do
       name { Faker::Address.city }
       location_type { 'city' }
-      parent_location_id { nil }
+      parent_location_id { create(:location, :state).id }
     end
 
-    trait :town do
+    trait :country do
       name { Faker::Address.city }
-      location_type { 'town' }
-      parent_location_id { nil }
-    end
-
-    trait :valid_country do
-      name { Faker::Address.country }
       location_type { 'country' }
       parent_location_id { nil }
-    end
-
-    trait :valid_state do
-      name { Faker::Address.state }
-      location_type { 'state' }
-      parent_location_id { create(:location, :valid_country).id }
-    end
-
-    trait :valid_city do
-      name { Faker::Address.city }
-      location_type { 'city' }
-      parent_location_id { create(:location, :valid_state).id }
-    end
-
-    trait :valid_town do
-      name { Faker::Address.street_name }
-      location_type { 'town' }
-      parent_location_id { create(:location, :valid_city).id }
     end
   end
 end

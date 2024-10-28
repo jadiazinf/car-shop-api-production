@@ -1,8 +1,7 @@
 FactoryBot.define do
   factory :brand do
-    trait :valid_brand do
-      name { Faker::Vehicle.make }
-    end
+    name { Faker::Vehicle.make }
+
     trait :invalid_brand do
       name { nil }
     end

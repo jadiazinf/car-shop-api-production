@@ -49,6 +49,8 @@ Rails.application.routes.draw do
         get :roles_by_company, on: :member
       end
 
+      resources :services
+
       namespace :super_admin do
         resources :brands do
           collection do

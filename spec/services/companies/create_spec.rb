@@ -2,9 +2,14 @@ require 'rails_helper'
 
 RSpec.describe Companies::Create do
   let(:valid_params) { build(:company) }
+
+  after do
+    FileUtils.rm_rf(ActiveStorage::Blob.service.root) if ActiveStorage::Blob.service.root
+  end
+
   context 'with invalid attributes' do
     it 'errors should not be empty' do
-      create_service = Companies::Create.new({})
+      create_service = described_class.new({})
       result = create_service.perform
       expect(result[:errors]).not_to be_empty
     end
@@ -16,17 +21,11 @@ RSpec.describe Companies::Create do
           dni: valid_params[:dni],
           email: valid_params[:email],
           address: valid_params[:address],
-          location: create(:location, :valid_town),
+          location: create(:location),
           users: [create(:user, :with_valid_attr)],
           company_charter: fixture_file_upload('image.jpg', 'image/jpg'),
           company_images: [fixture_file_upload('image.jpg', 'image/jpg')]
         }
-      end
-
-      it 'errors should be for company charter' do
-        create_service = Companies::Create.new(with_invalid_company_charter)
-        result = create_service.perform
-        expect(result[:errors]).not_to be_empty
       end
 
       let(:with_invalid_images) do
@@ -35,14 +34,25 @@ RSpec.describe Companies::Create do
           dni: valid_params[:dni],
           email: valid_params[:email],
           address: valid_params[:address],
-          location: create(:location, :valid_town),
+          location: create(:location),
           users: [create(:user, :with_valid_attr)],
           company_charter: fixture_file_upload('company_charter.pdf', 'application/pdf'),
           company_images: [fixture_file_upload('company_charter.pdf', 'application/pdf')]
         }
       end
+
+      after do
+        FileUtils.rm_rf(ActiveStorage::Blob.service.root) if ActiveStorage::Blob.service.root
+      end
+
+      it 'errors should be for company charter' do
+        create_service = described_class.new(with_invalid_company_charter)
+        result = create_service.perform
+        expect(result[:errors]).not_to be_empty
+      end
+
       it 'errors should be for company images' do
-        create_service = Companies::Create.new(with_invalid_images)
+        create_service = described_class.new(with_invalid_images)
         result = create_service.perform
         expect(result[:errors]).not_to be_empty
       end
@@ -56,14 +66,15 @@ RSpec.describe Companies::Create do
         dni: valid_params[:dni],
         email: valid_params[:email],
         address: valid_params[:address],
-        location: create(:location, :valid_town),
+        location: create(:location),
         user: create(:user, :with_valid_attr),
         company_charter: fixture_file_upload('company_charter.pdf', 'application/pdf'),
         company_images: [fixture_file_upload('image.jpg', 'image/jpg')]
       }
     end
+
     it 'ok should be true' do
-      create_service = Companies::Create.new(params)
+      create_service = described_class.new(params)
       result = create_service.perform
       expect(result[:ok]).to be true
     end
