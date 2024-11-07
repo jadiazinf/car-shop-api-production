@@ -5,6 +5,6 @@ json.total_pages @services.total_pages
 json.total_count @services.total_count
 
 json.data do
-  json.array! @services, :id, :name, :service_type, :description, :created_at,
+  json.array! @services, :id, :name, :category, :price, :is_active, :description, :created_at,
               :updated_at
 end

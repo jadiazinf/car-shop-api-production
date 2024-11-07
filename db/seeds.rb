@@ -172,3 +172,56 @@ gma.save
 
 user_company = UserCompany.where(company_id: gma.id, user_id: user.id).first
 user_company.update!(roles: ['superadmin'])
+
+Category.create!(
+  [
+    {
+      name: 'Mantenimiento preventivo',
+      is_active: true
+    },
+    {
+      name: 'Motor',
+      is_active: true
+    },
+    {
+      name: 'Tren delantero',
+      is_active: true
+    },
+    {
+      name: 'Transmisión',
+      is_active: true
+    },
+    {
+      name: 'Neumáticos',
+      is_active: true
+    },
+    {
+      name: 'Suspensión',
+      is_active: true
+    },
+    {
+      name: 'Dirección',
+      is_active: true
+    },
+    {
+      name: 'Frenos',
+      is_active: true
+    },
+    {
+      name: 'Servicios eléctricos',
+      is_active: true
+    },
+    {
+      name: 'Aire acondicionado',
+      is_active: true
+    },
+    {
+      name: 'Inspección y diagnóstico',
+      is_active: true
+    },
+    {
+      name: 'Carroceria',
+      is_active: true
+    }
+  ]
+)

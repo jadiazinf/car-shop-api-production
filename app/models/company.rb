@@ -4,7 +4,7 @@ class Company < ApplicationRecord
   has_many :users, through: :user_companies
   has_one_attached :company_charter
   has_many_attached :company_images
-  has_many :services, through: :companies_services
+  has_many :services, dependent: :destroy
 
   ERRORS_KEY = 'active_record.errors.general'.freeze
 

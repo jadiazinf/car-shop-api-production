@@ -66,7 +66,7 @@ class Api::V1::CompaniesController < ApplicationController
   end
 
   def company_params
-    params.permit(:name, :dni, :email, :number_of_employees,
+    params.permit(:id, :name, :dni, :email, :number_of_employees,
                   :address, :location_id, :company_charter, :disposition,
                   payment_methods: [], social_networks: [],
                   phone_numbers: [], company_images: [])

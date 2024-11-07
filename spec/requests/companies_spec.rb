@@ -46,7 +46,7 @@ RSpec.describe 'Companies' do
     it 'updates a company' do
       headers = Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' },
                                                       admin.user)
-      patch(api_v1_company_path(id: admin.company_id),
+      patch(api_v1_company_path(id: admin.company_id, company_id: admin.company_id),
             headers:, params:)
       expect(response).to have_http_status(:ok)
     end

@@ -51,6 +51,8 @@ Rails.application.routes.draw do
 
       resources :services
 
+      resources :categories
+
       namespace :super_admin do
         resources :brands do
           collection do
