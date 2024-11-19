@@ -39,10 +39,10 @@ RSpec.describe 'Services' do
     let(:invalid_attributes) { attributes_for(:service, :invalid_service) }
 
     context 'with authentication scenarios' do
-      it 'shows unauthorized when not an admin' do
+      it 'shows forbidden when not an admin' do
         post(api_v1_services_path(company_id: users[:superadmin].company_id),
              headers: auth_headers[:superadmin], params: { service: valid_attributes }, as: :json)
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'creates a service when an admin and valid attributes' do
@@ -64,11 +64,11 @@ RSpec.describe 'Services' do
   describe 'PATCH #update' do
     let(:service) { create(:service) }
 
-    it 'shows unauthorized when not an admin for update' do
+    it 'shows forbidden when not an admin for update' do
       patch(api_v1_service_path(id: service.id, company_id: users[:superadmin].company_id),
             headers: auth_headers[:superadmin],
             params: { service: { name: 'Updated name' } }, as: :json)
-      expect(response).to have_http_status(:unauthorized)
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'updates a service with valid attributes' do

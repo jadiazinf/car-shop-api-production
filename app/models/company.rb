@@ -1,8 +1,10 @@
 class Company < ApplicationRecord
+  # missing profile image specs
   belongs_to :location, optional: false
   has_many :user_companies, dependent: :destroy
   has_many :users, through: :user_companies
   has_one_attached :company_charter
+  has_one_attached :profile_image
   has_many_attached :company_images
   has_many :services, dependent: :destroy
 

@@ -35,12 +35,12 @@ RSpec.describe 'Models' do
         }
       end
 
-      it 'returns an unauthorized' do
+      it 'returns forbidden' do
         put(api_v1_super_admin_model_path(new_model),
             params:,
             headers: Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' },
                                                            not_a_superadmin.user))
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -71,12 +71,12 @@ RSpec.describe 'Models' do
         }
       end
 
-      it 'returns an unauthorized' do
+      it 'returns forbidden' do
         post(api_v1_super_admin_models_path,
              params:,
              headers: Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' },
                                                             not_a_superadmin.user))
-        expect(response.parsed_body[:status]).to eq 'unauthorized'
+        expect(response.parsed_body[:status]).to eq 'forbidden'
       end
     end
 

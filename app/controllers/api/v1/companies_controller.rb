@@ -2,20 +2,18 @@ class Api::V1::CompaniesController < ApplicationController
   before_action :authenticate_user!, unless: :devise_controller?,
                                      only: %i[show create update roles_by_company]
   before_action :authorize_admin!, only: %i[update]
+  before_action :authorize_admin_or_superadmin!, only: %i[set_profile_image]
   before_action :set_location, only: %i[create]
-  before_action :set_company, only: %i[show update company_charter company_images roles_by_company]
+  before_action :set_company,
+                only: %i[show update company_charter company_images roles_by_company
+                         set_profile_image]
   before_action :allow_iframe, only: %i[company_charter company_images]
 
   def index
-    companies = Company.all
-    render json: companies, status: :ok
+    @companies = Company.all.page(params[:page].to_i)
   end
 
-  def show
-    render json: @company, status: :ok
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
-  end
+  def show; end
 
   def create
     service = Companies::Create.new(company_params
@@ -59,6 +57,16 @@ class Api::V1::CompaniesController < ApplicationController
     render json: { company_charter_url: }
   end
 
+  def set_profile_image
+    result = Companies::SetProfileImage.new(params[:id], company_params[:profile_image]).perform
+    if result.first
+      profile_image_url = url_for(@company.profile_image)
+      render json: { profile_image: profile_image_url }, status: :ok
+    else
+      render json: { errors: result.first }, status: :unprocessable_content
+    end
+  end
+
   private
 
   def set_company
@@ -67,9 +75,9 @@ class Api::V1::CompaniesController < ApplicationController
 
   def company_params
     params.permit(:id, :name, :dni, :email, :number_of_employees,
-                  :address, :location_id, :company_charter, :disposition,
-                  payment_methods: [], social_networks: [],
-                  phone_numbers: [], company_images: [])
+                  :address, :location_id, :profile_image, :company_charter, :disposition,
+                  :page, payment_methods: [], social_networks: [], phone_numbers: [],
+                         company_images: [])
   end
 
   def user_params

@@ -31,12 +31,12 @@ RSpec.describe 'Brands' do
         }
       end
 
-      it 'returns an unauthorized' do
+      it 'returns forbidden' do
         put(api_v1_super_admin_brand_path(brand),
             params:,
             headers: Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' },
                                                            not_a_superadmin.user))
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 

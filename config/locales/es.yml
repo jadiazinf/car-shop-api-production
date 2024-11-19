@@ -118,6 +118,7 @@ es:
         wrong_location_type: Tipo de ubicación incorrecto, debe ser un municipio
         unique_dni: Número de identificación ya se encuentra registrado
         unique_email: Email ya se encuentra registrado
+        wrong_profile_image_format: Imagen de perfil no suministrada o de formato incorrecto. Debe de ser un JPG, PNG o JPEG
     users_companies_requests:
       errors:
         company_id_required: Id de la compañía es requerido

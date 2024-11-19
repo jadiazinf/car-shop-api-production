@@ -32,11 +32,11 @@ RSpec.describe 'Categories' do
     let(:invalid_attributes) { attributes_for(:category, :invalid) }
 
     context 'with authentication scenarios' do
-      it 'shows unauthorized when not a superadmin' do
+      it 'shows forbidden when not a superadmin' do
         post(api_v1_categories_path(company_id: users[:admin].company_id),
              headers: auth_headers[:admin],
              params: { category: valid_attributes }, as: :json)
-        expect(response).to have_http_status(:unauthorized)
+        expect(response).to have_http_status(:forbidden)
       end
 
       it 'creates a category when a superadmin and valid attributes' do
@@ -58,11 +58,11 @@ RSpec.describe 'Categories' do
   describe 'PATCH #update' do
     let(:category) { create(:category) }
 
-    it 'shows unauthorized when not a superadmin for update' do
+    it 'shows forbidden when not a superadmin for update' do
       patch(api_v1_category_path(id: category.id, company_id: users[:admin].company_id),
             headers: auth_headers[:admin],
             params: { category: { name: 'Updated name' } }, as: :json)
-      expect(response).to have_http_status(:unauthorized)
+      expect(response).to have_http_status(:forbidden)
     end
 
     it 'updates a category with valid attributes' do

@@ -120,6 +120,7 @@ en:
         wrong_location_type: Wrong location type, must be a town
         unique_dni: Identification number is already taken
         unique_email: Email is already taken
+        wrong_profile_image_format: Blank or wrong profile image format. Supported formats are JPG, JPEG, PNG
     users_companies_requests:
       errors:
         company_id_required: Company id is required

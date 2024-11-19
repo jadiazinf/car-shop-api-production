@@ -47,6 +47,7 @@ Rails.application.routes.draw do
         get :company_charter, on: :member
         get :company_images, on: :member
         get :roles_by_company, on: :member
+        patch :set_profile_image, on: :member
       end
 
       resources :services

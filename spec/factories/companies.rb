@@ -9,7 +9,7 @@ FactoryBot.define do
     phone_numbers { [Faker::PhoneNumber.phone_number] }
     address { Faker::Address.full_address }
     is_active { false }
-    location
+    location factory: %i[location], strategy: :create
     users { [create(:user, :registration)] }
   end
 end

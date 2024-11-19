@@ -13,6 +13,11 @@ FactoryBot.define do
       is_active { true }
     end
 
+    trait :valid_technical do
+      roles { ['technical'] }
+      is_active { true }
+    end
+
     trait :valid_superadmin do
       roles { ['superadmin'] }
       is_active { true }

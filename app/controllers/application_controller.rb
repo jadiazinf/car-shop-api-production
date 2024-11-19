@@ -7,13 +7,9 @@ class ApplicationController < ActionController::API
   def validate_token(token)
     if token && token['sub'].present?
       jti = token['jti']
-      if JwtDenylist.exists?(jti:)
-        render json: { error: I18n.t('active_record.auth.errors.revoked_jwt') },
-               status: :unauthorized
-      end
+      render_forbidden if JwtDenylist.exists?(jti:)
     else
-      render json: { error: I18n.t('active_record.auth.errors.invalid_jwt') },
-             status: :unauthorized
+      render_unauthorized(nil)
     end
   end
 
@@ -31,14 +27,21 @@ class ApplicationController < ActionController::API
     user_roles = current_user.roles(params[:company_id])
     return if user_roles.include?('admin')
 
-    render_unauthorized(nil)
+    render_forbidden
   end
 
   def authorize_superadmin!
     user_roles = current_user.roles(params[:company_id])
     return if user_roles.include?('superadmin')
 
-    render_unauthorized(nil)
+    render_forbidden
+  end
+
+  def authorize_admin_or_superadmin!
+    user_roles = current_user.roles(params[:company_id])
+    return if user_roles.include?('superadmin') || user_roles.include?('admin')
+
+    render_forbidden
   end
 
   def current_user
@@ -59,6 +62,10 @@ class ApplicationController < ActionController::API
 
   def render_unauthorized(errors)
     render_response(ok: false, status: :unauthorized, data: nil, message: 'Unauthorized', errors:)
+  end
+
+  def render_forbidden
+    render_response(ok: false, status: :forbidden, data: nil, message: 'Forbidden', errors: nil)
   end
 
   def render_success_response(data)
