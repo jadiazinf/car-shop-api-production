@@ -48,6 +48,7 @@ Rails.application.routes.draw do
         get :company_images, on: :member
         get :roles_by_company, on: :member
         patch :set_profile_image, on: :member
+        get :search_companies_with_filters, on: :collection
       end
 
       resources :services

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Companies' do
   let(:company) { build(:company) }
+  let(:headers) { { 'Accept' => 'application/json', 'Content-Type' => 'application/json' } }
 
   describe 'POST #create' do
     let(:user) { create(:user, :registration) }
@@ -82,6 +83,26 @@ RSpec.describe 'Companies' do
                                                   company_id: admin.company_id),
             headers:, params: { profile_image: fixture_file_upload('image.jpg', 'image/jpeg') })
       expect(response).to have_http_status(:ok)
+    end
+  end
+
+  describe 'GET #search_companies_with_filters' do
+    let(:service) { create(:service) }
+
+    it 'responds with a list of companies' do # rubocop:disable RSpec/ExampleLength
+      get(search_companies_with_filters_api_v1_companies_path(page: 1,
+                                                              location_id: service.company.location_id, # rubocop:disable Layout/LineLength
+                                                              category_ids: [service.category_id.to_s], # rubocop:disable Layout/LineLength
+                                                              service_name: service.name,
+                                                              company_name: service.company.name),
+          headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/json' })
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'responds bad request because page is required' do
+      get(search_companies_with_filters_api_v1_companies_path,
+          headers: { 'Accept' => 'application/json', 'Content-Type' => 'application/json' })
+      expect(response).to have_http_status(:bad_request)
     end
   end
 end

@@ -67,6 +67,16 @@ class Api::V1::CompaniesController < ApplicationController
     end
   end
 
+  def search_companies_with_filters
+    if params[:page].blank?
+      render json: { error: ['Page is required'] }, status: :bad_request
+    else
+      @companies = Companies::SearchFilters.new(params).perform
+      @companies = @companies.blank? ? [] : @companies.page(params[:page])
+      render :index, status: :ok
+    end
+  end
+
   private
 
   def set_company

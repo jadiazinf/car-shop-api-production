@@ -11,6 +11,7 @@ else
   json.phone_numbers @company.phone_numbers
   json.address @company.address
   json.is_active @company.is_active
+  json.location_id @company.location_id
 
   if @company.profile_image.attached?
     json.profile_image_url url_for(@company.profile_image)

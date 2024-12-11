@@ -27,5 +27,11 @@ FactoryBot.define do
       location_type { 'country' }
       parent_location_id { nil }
     end
+
+    trait :town do
+      name { Faker::Address.city }
+      location_type { 'town' }
+      parent_location_id { create(:location, :city).id }
+    end
   end
 end
