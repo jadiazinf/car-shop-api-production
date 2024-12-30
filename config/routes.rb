@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users do
         get :user_companies, on: :member
+        get :search_by_filters, on: :collection
       end
 
       resources :vehicles do
@@ -54,6 +55,13 @@ Rails.application.routes.draw do
       resources :services
 
       resources :categories
+
+      resources :users_companies do
+        get :admin, on: :member
+        get :company_users, on: :collection
+        put :toggle_active, on: :member
+        get :validate_user_company, on: :collection
+      end
 
       namespace :super_admin do
         resources :brands do

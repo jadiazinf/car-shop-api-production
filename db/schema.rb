@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_01_100225) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_18_161614) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "unaccent"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -147,6 +148,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_01_100225) do
     t.boolean "is_active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["company_id", "user_id"], name: "index_users_companies_on_company_id_and_user_id", unique: true
     t.index ["company_id"], name: "index_users_companies_on_company_id"
     t.index ["user_id", "company_id"], name: "index_users_companies_on_user_id_and_company_id", unique: true
     t.index ["user_id"], name: "index_users_companies_on_user_id"

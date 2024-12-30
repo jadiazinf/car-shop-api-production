@@ -11,8 +11,13 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def user_companies
-    companies = @user.companies
-    render json: companies, status: :ok
+    companies = UserCompany.where(user_id: @user.id, is_active: true).includes(:company)
+    render json: companies.as_json(include: :company), status: :ok
+  end
+
+  def search_by_filters
+    @users = User.where('is_active = ? AND email LIKE ?', true, "#{params[:email].to_s.strip}%")
+    render json: @users, status: :ok
   end
 
   private
