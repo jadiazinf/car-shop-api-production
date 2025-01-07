@@ -7,7 +7,7 @@ class ApplicationController < ActionController::API
   def validate_token(token)
     if token && token['sub'].present?
       jti = token['jti']
-      render_forbidden if JwtDenylist.exists?(jti:)
+      render_unauthorized(nil) if JwtDenylist.exists?(jti:)
     else
       render_unauthorized(nil)
     end

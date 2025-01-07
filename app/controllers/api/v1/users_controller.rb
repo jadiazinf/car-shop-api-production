@@ -1,6 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_user
+  before_action :authenticate_user!, except: %i[new_token]
+  before_action :set_user, except: %i[new_token]
 
   def update
     if @user.update(user_params)
@@ -18,6 +18,17 @@ class Api::V1::UsersController < ApplicationController
   def search_by_filters
     @users = User.where('is_active = ? AND email LIKE ?', true, "#{params[:email].to_s.strip}%")
     render json: @users, status: :ok
+  end
+
+  def new_token
+    new_token_service = Users::GenerateToken.new(params[:id])
+    token = new_token_service.perform
+    response.set_header('Authorization', "Bearer #{token}")
+    if token.nil?
+      render json: { error: 'Invalid user' }, status: :bad_request
+    else
+      render json: { message: 'Token refreshed successfully' }, status: :ok
+    end
   end
 
   private

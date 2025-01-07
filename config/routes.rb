@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       resources :users do
         get :user_companies, on: :member
         get :search_by_filters, on: :collection
+        get :new_token, on: :member
       end
 
       resources :vehicles do

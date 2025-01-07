@@ -18,4 +18,16 @@ RSpec.describe 'Users' do
       expect(response).to be_successful
     end
   end
+
+  describe 'GET #get_new_token' do
+    it 'returns http status ok response' do
+      get(new_token_api_v1_user_path(user.id), headers:)
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns http status bad request response' do
+      get(new_token_api_v1_user_path(-1), headers:)
+      expect(response).to have_http_status(:bad_request)
+    end
+  end
 end

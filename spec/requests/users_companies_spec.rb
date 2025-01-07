@@ -54,7 +54,7 @@ RSpec.describe 'UsersCompanies' do
   end
 
   describe 'GET #company_users' do
-    it 'returns http status unauthorized when its not admin' do # rubocop:disable RSpec/ExampleLength
+    it 'returns http status forbbiden when its not admin' do # rubocop:disable RSpec/ExampleLength
       get(
         company_users_api_v1_users_companies_path(company_id: technical_params[:company_id],
                                                   page: technical_params[:page]),
@@ -74,7 +74,7 @@ RSpec.describe 'UsersCompanies' do
   end
 
   describe 'PUT #toggle_active' do
-    it 'returns http status unauthorized when its not admin' do # rubocop:disable RSpec/ExampleLength
+    it 'returns http status forbbiden when its not admin' do # rubocop:disable RSpec/ExampleLength
       put(
         toggle_active_api_v1_users_company_path(id: technical_params[:id],
                                                 user_company_id: technical_params[:id],
