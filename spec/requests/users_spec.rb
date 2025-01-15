@@ -30,4 +30,11 @@ RSpec.describe 'Users' do
       expect(response).to have_http_status(:bad_request)
     end
   end
+
+  describe 'GET #vehicles' do
+    it 'returns http status ok response' do
+      get(vehicles_api_v1_user_path(id: user.id, page: 1), headers: auth_headers)
+      expect(response).to have_http_status(:ok)
+    end
+  end
 end

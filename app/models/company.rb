@@ -13,7 +13,7 @@ class Company < ApplicationRecord
   IMAGE_WRONG_FORMAT_MESSAGE = I18n.t('active_record.companies.errors.wrong_company_images_format')
   SIZE_EXCEEDED_MESSAGE = I18n.t('active_record.companies.errors.image_size_exceeded')
 
-  validates :name, :email, :address, :dni, :user_ids,
+  validates :name, :email, :address, :dni,
             :number_of_employees, presence: true
 
   validates :dni, uniqueness: { message: I18n.t('active_record.companies.errors.unique_dni') }

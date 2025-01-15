@@ -21,7 +21,7 @@ RSpec.describe 'Companies' do
     it 'creates a new company' do
       post(api_v1_companies_path,
            headers: Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' },
-                                                          company.users.first), params:)
+                                                          user), params:)
       expect(response).to have_http_status(:created)
     end
   end

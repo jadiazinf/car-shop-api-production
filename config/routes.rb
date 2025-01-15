@@ -23,12 +23,12 @@ Rails.application.routes.draw do
         get :user_companies, on: :member
         get :search_by_filters, on: :collection
         get :new_token, on: :member
+        get :vehicles, on: :member
       end
 
       resources :vehicles do
-        collection do
-          post :create_vehicle
-        end
+        patch :attach_images, on: :member
+        patch :toggle_active, on: :member
       end
 
       resources :locations do

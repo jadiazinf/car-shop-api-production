@@ -31,11 +31,15 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def vehicles
+    @vehicles = @user.vehicles.where(is_active: true).includes(model: %i[brand]).page(params[:page])
+  end
+
   private
 
   def user_params
     params.require(:user).permit(:id, :email, :first_name, :last_name, :dni, :birthdate, :address,
-                                 :phone_number, :is_active, roles: [])
+                                 :gender, :phone_number, :location_id, :is_active, roles: [])
   end
 
   def set_user

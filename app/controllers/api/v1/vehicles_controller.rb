@@ -1,22 +1,37 @@
 class Api::V1::VehiclesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_vehicle, only: %i[update]
+  before_action :set_vehicle, only: %i[update attach_images show toggle_active]
+
+  def show; end
 
   def create
-    service = Vehicle::Create.new(vehicle_params)
-    valid, errors, vehicle = service.perform
-    render_success_response(vehicle) if valid
+    service = Vehicles::Create.new(vehicle_params)
+    valid, errors, @vehicle = service.perform
+    render json: { errors: }, status: :unprocessable_entity unless valid
 
-    render_response(ok: false, status: :unprocessable_entity, data: nil, message: nil, errors:)
+    render :show, status: :created if valid
   end
 
   def update
-    if vehicle.update(vehicle_params)
-      render_response(ok: true, status: :ok, data: vehicle, message: nil, errors: nil)
+    if @vehicle.update(vehicle_params)
+      render :show, status: :ok
     else
-      render_response(ok: false, status: :unprocessable_entity, data: nil, message: nil,
-                      errors: vehicle.errors)
+      render :show, status: :unprocessable_entity
     end
+  end
+
+  def attach_images
+    service = Vehicles::AttachImages.new({ id: params[:id], images: params[:vehicle_images] })
+    valid, errors = service.perform
+    render json: { errors: }, status: :unprocessable_entity unless valid
+
+    render :show, status: :ok
+  end
+
+  def toggle_active
+    @vehicle.is_active = !@vehicle.is_active
+    @vehicle.save!
+    render json: { is_active: @vehicle.is_active }
   end
 
   private
@@ -30,8 +45,7 @@ class Api::V1::VehiclesController < ApplicationController
   def vehicle_params
     params.require(:vehicle).permit(:license_plate, :year, :axles, :tires, :color, :vehicle_type,
                                     :load_capacity, :mileage, :engine_serial, :body_serial,
-                                    :engine_type, :transmission, :is_active, :user_id, :model_id,
-                                    :vehicle_images)
+                                    :engine_type, :transmission, :is_active, :user_id, :model_id)
   end
 
   def render_response(obj)

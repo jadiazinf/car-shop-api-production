@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Vehicles::Create do
-  let(:invalid_vehicle) { build(:vehicle, :invalid).attributes }
+  context 'when the attributes are invalid' do
+    let(:invalid_vehicle) { build(:vehicle, :invalid).attributes }
 
-  it 'Create vehicle with invalid attributes' do
-    service = described_class.new(invalid_vehicle)
-    result = service.perform
-    expect(result[0]).to be false
+    it 'Return false when vehicle have invalid attributes' do
+      service = described_class.new(invalid_vehicle)
+      result = service.perform
+      expect(result[0]).to be false
+    end
   end
 
   context 'when the attributes are valid' do

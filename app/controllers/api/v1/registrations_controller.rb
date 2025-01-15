@@ -12,9 +12,9 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   def respond_with(resource, _opts = {})
     if resource.persisted?
       configure_header
-      render_success_response(resource)
+      render json: { user: resource }, status: :created
     else
-      render_bad_request(resource.errors.full_messages)
+      render json: { errors: resource.errors.full_messages }, status: :bad_request
     end
   rescue StandardError
     render_internal_server_error(I18n.t('active_record.errors.standard_error'))
@@ -43,6 +43,11 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
 
   def render_success_response(data)
     render_response(ok: true, status: :ok, data:,
+                    message: nil, errors: nil)
+  end
+
+  def render_created_response(data)
+    render_response(ok: true, status: :created, data:,
                     message: nil, errors: nil)
   end
 

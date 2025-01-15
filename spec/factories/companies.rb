@@ -10,7 +10,6 @@ FactoryBot.define do
     address { Faker::Address.full_address }
     is_active { false }
     location factory: %i[location], strategy: :create
-    users { [create(:user, :registration)] }
 
     trait :active_company do
       name { Faker::Company.name }
@@ -23,7 +22,6 @@ FactoryBot.define do
       address { Faker::Address.full_address }
       is_active { true }
       location factory: %i[location], strategy: :create
-      users { [create(:user, :registration)] }
     end
   end
 end

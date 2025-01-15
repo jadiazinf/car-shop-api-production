@@ -148,9 +148,10 @@ gma = Company.new(
   number_of_employees: 1,
   phone_numbers: ['0424-1234589'],
   address: 'Sta Rosa',
-  location_id: Location.where(location_type: 'town').first.id,
-  user_ids: [user.id]
+  location_id: Location.where(location_type: 'town').first.id
 )
+
+gma.user_companies.build(user_id: user.id, roles: ['superadmin'])
 
 gma.company_charter.attach(
   io: Rails.root.join('spec/fixtures/files/company_charter.pdf').open,

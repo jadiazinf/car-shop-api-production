@@ -36,9 +36,11 @@ class Companies::Create
 
   def create_company
     @company = Company.new(@params.except(:user))
-    @company.user_ids = [@user.id]
 
-    @company.save if @company.valid?
+    return unless @company.valid?
+
+    UserCompany.create(user: @user, company: @company, roles: ['admin'])
+    @company.save
   end
 
   def process_company_files

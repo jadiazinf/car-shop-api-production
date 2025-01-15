@@ -20,10 +20,11 @@ class Api::V1::CompaniesController < ApplicationController
                                                   .except(:location_id)
                                                   .merge(user: current_user, location: @location))
     response = service.perform
+    @company = response[:data]
     if response[:ok]
-      render json: { response: }, status: :created
+      render :show, status: :created
     else
-      render json: { response: }, status: :unprocessable_entity
+      render :show, status: :unprocessable_entity
     end
   end
 
