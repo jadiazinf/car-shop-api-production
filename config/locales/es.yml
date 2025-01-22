@@ -78,10 +78,10 @@ es:
         axles: Cantidad de Ejes
         tires: Cantidad de Cauchos
         vehicle_type:
-          third: Menor a 2.500 KGs
-          fourth: Entre 2.500 y 6.000 KGs
-          fith: Entre 6.000 KGs y 9000 KGs
-          tsp: Mayor a 9000 KGs
+          motorbike: moto
+          car: carro
+          van: camioneta
+          truck: camión
         engine_type: Tipo de motor
         engine_types:
           diesel: Diesel

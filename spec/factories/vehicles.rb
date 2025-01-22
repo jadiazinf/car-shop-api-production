@@ -3,7 +3,7 @@ FactoryBot.define do
     year { Time.zone.now.year }
     color { Faker::Vehicle.color }
     license_plate { Faker::Vehicle.license_plate }
-    vehicle_type { Vehicle.vehicle_types['third_type'] }
+    vehicle_type { Vehicle.vehicle_types['car'] }
     engine_type { Vehicle.engine_types['diesel'] }
     load_capacity { Faker::Number.number(digits: 4) }
     mileage { Faker::Vehicle.mileage }

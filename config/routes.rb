@@ -51,6 +51,7 @@ Rails.application.routes.draw do
         get :roles_by_company, on: :member
         patch :set_profile_image, on: :member
         get :search_companies_with_filters, on: :collection
+        get :services, on: :member
       end
 
       resources :services
@@ -62,6 +63,11 @@ Rails.application.routes.draw do
         get :company_users, on: :collection
         put :toggle_active, on: :member
         get :validate_user_company, on: :collection
+      end
+
+      resources :quotes do
+        get :services, on: :member
+        get :by_user, on: :collection
       end
 
       namespace :super_admin do

@@ -29,8 +29,9 @@ class Api::V1::ServicesController < ApplicationController
   private
 
   def service_params
-    params.require(:service).permit(:id, :name, :description, :company_id, :category_id, :price,
-                                    :is_active, :page)
+    params.require(:service).permit(:id, :name, :description, :company_id, :category_id,
+                                    :price_for_motorbike, :price_for_car, :price_for_van,
+                                    :price_for_truck, :is_active, :page)
   end
 
   def set_service

@@ -80,10 +80,10 @@ en:
         axles: Axles
         tires: Tires
         vehicle_type:
-          third: Less than 2.500 KGs
-          fourth: Between 2.500 and 6.000 KGs
-          fifth: Between 6.000 KGs and 9000 KGs
-          tsp: More than 9000 KGs
+          motorbike: motorbike
+          car: car
+          van: van
+          truck: truck
         engine_type: Engine Type
         engine_types:
           diesel: Diesel

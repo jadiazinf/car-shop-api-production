@@ -1,6 +1,7 @@
 class Vehicle < ApplicationRecord
   belongs_to :model
   belongs_to :user, optional: true
+  has_many :quotes, dependent: :destroy
   has_many_attached :vehicle_images
 
   ERRORS_KEY = 'active_record.errors.general'.freeze
@@ -31,10 +32,10 @@ class Vehicle < ApplicationRecord
   validate :vehicle_images_format
 
   enum :vehicle_type, {
-    third_type: I18n.t('active_record.vehicles.attributes.vehicle_type.third'),
-    fourth_type: I18n.t('active_record.vehicles.attributes.vehicle_type.fourth'),
-    fith_type: I18n.t('active_record.vehicles.attributes.vehicle_type.fith'),
-    tsp: I18n.t('active_record.vehicles.attributes.vehicle_type.tsp')
+    motorbike: I18n.t('active_record.vehicles.attributes.vehicle_type.motorbike'),
+    car: I18n.t('active_record.vehicles.attributes.vehicle_type.car'),
+    van: I18n.t('active_record.vehicles.attributes.vehicle_type.van'),
+    truck: I18n.t('active_record.vehicles.attributes.vehicle_type.truck')
   }
 
   enum :engine_type, {

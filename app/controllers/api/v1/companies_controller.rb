@@ -1,12 +1,12 @@
-class Api::V1::CompaniesController < ApplicationController
+class Api::V1::CompaniesController < ApplicationController # rubocop:disable Metrics/ClassLength
   before_action :authenticate_user!, unless: :devise_controller?,
-                                     only: %i[show create update roles_by_company]
+                                     only: %i[create update roles_by_company]
   before_action :authorize_admin!, only: %i[update]
   before_action :authorize_admin_or_superadmin!, only: %i[set_profile_image]
   before_action :set_location, only: %i[create]
   before_action :set_company,
                 only: %i[show update company_charter company_images roles_by_company
-                         set_profile_image]
+                         set_profile_image services]
   before_action :allow_iframe, only: %i[company_charter company_images]
 
   def index
@@ -76,6 +76,11 @@ class Api::V1::CompaniesController < ApplicationController
       @companies = @companies.blank? ? [] : @companies.page(params[:page])
       render :index, status: :ok
     end
+  end
+
+  def services
+    @services = Service.where(company_id: @company.id,
+                              is_active: true).includes(:category).page(params[:page])
   end
 
   private

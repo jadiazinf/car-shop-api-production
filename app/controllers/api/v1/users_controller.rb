@@ -16,7 +16,10 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def search_by_filters
-    @users = User.where('is_active = ? AND email LIKE ?', true, "#{params[:email].to_s.strip}%")
+    name = params[:name].to_s.strip
+    email = params[:email].to_s.strip
+    dni = params[:dni].to_s.strip
+    @users = Users::FilterService.new(name:, email:, dni:).perform
     render json: @users, status: :ok
   end
 
@@ -32,7 +35,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def vehicles
-    @vehicles = @user.vehicles.where(is_active: true).includes(model: %i[brand]).page(params[:page])
+    user = User.find(params[:id])
+    @vehicles = user.vehicles.where(is_active: true).includes(model: %i[brand]).page(params[:page])
   end
 
   private

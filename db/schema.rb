@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_16_093138) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_21_162822) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -104,10 +104,28 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_16_093138) do
     t.index ["brand_id"], name: "index_models_on_brand_id"
   end
 
+  create_table "quotes", force: :cascade do |t|
+    t.string "group_id", null: false
+    t.decimal "total_cost", precision: 10, scale: 2, null: false
+    t.date "date", default: -> { "CURRENT_DATE" }, null: false
+    t.string "note"
+    t.string "status_by_company"
+    t.string "status_by_client"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "vehicle_id"
+    t.bigint "service_id"
+    t.index ["service_id"], name: "index_quotes_on_service_id"
+    t.index ["vehicle_id"], name: "index_quotes_on_vehicle_id"
+  end
+
   create_table "services", force: :cascade do |t|
     t.string "name", null: false
     t.string "description", null: false
-    t.decimal "price", precision: 10, scale: 2, null: false
+    t.decimal "price_for_motorbike", precision: 10, scale: 2
+    t.decimal "price_for_car", precision: 10, scale: 2
+    t.decimal "price_for_van", precision: 10, scale: 2
+    t.decimal "price_for_truck", precision: 10, scale: 2
     t.boolean "is_active", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -194,6 +212,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_16_093138) do
   add_foreign_key "companies", "locations"
   add_foreign_key "locations", "locations", column: "parent_location_id"
   add_foreign_key "models", "brands"
+  add_foreign_key "quotes", "services"
+  add_foreign_key "quotes", "vehicles"
   add_foreign_key "services", "categories"
   add_foreign_key "services", "companies"
   add_foreign_key "users", "locations"
