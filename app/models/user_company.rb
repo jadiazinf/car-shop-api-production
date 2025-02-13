@@ -2,6 +2,7 @@ class UserCompany < ApplicationRecord
   self.table_name = 'users_companies'
   belongs_to :user
   belongs_to :company
+  has_many :orders, foreign_key: 'assigned_to', dependent: :nullify, inverse_of: :user_company
 
   validates :user, presence: { message: I18n.t('active_record.user_company.errors.user_required') }
   validates :company,

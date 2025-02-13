@@ -1,5 +1,8 @@
 class Api::V1::UsersCompaniesController < ApplicationController
-  before_action :authorize_admin!, only: %i[company_users toggle_active update]
+  before_action :authenticate_user!, unless: :devise_controller?,
+                                     only: %i[user_company_by_user_and_company]
+  before_action :authorize_admin_or_superadmin!, only: %i[create update]
+  before_action :authorize_admin!, only: %i[toggle_active update]
   before_action :user_company_params, only: %i[create]
   before_action :set_user_company, only: %i[update show admin toggle_active]
 
@@ -47,6 +50,11 @@ class Api::V1::UsersCompaniesController < ApplicationController
     else
       render json: { user_company: nil }, status: :not_found
     end
+  end
+
+  def user_company_by_user_and_company
+    @user_company = UserCompany.find_by(user_id: params[:user_id], company_id: params[:company_id])
+    render :show, status: :ok
   end
 
   private

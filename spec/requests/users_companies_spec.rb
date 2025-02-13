@@ -30,7 +30,7 @@ RSpec.describe 'UsersCompanies' do
     let(:admin_attr) { build(:user_company, :valid_admin) }
 
     it 'returns http status created when valid attributes' do
-      post(api_v1_users_companies_path,
+      post(api_v1_users_companies_path(company_id: admin.company_id),
            headers: Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' },
                                                           admin.user),
            params: { user_company: admin_attr.attributes })
@@ -38,7 +38,7 @@ RSpec.describe 'UsersCompanies' do
     end
 
     it 'returns http status bad request when invalid attributes' do
-      post(api_v1_users_companies_path,
+      post(api_v1_users_companies_path(company_id: admin.company_id),
            headers: Devise::JWT::TestHelpers.auth_headers({ 'Accept' => 'application/json' },
                                                           admin.user),
            params: { user_company: { quems: 1 } })

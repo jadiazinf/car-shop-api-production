@@ -24,6 +24,7 @@ Rails.application.routes.draw do
         get :search_by_filters, on: :collection
         get :new_token, on: :member
         get :vehicles, on: :member
+        get :all_vehicles, on: :collection
       end
 
       resources :vehicles do
@@ -52,22 +53,47 @@ Rails.application.routes.draw do
         patch :set_profile_image, on: :member
         get :search_companies_with_filters, on: :collection
         get :services, on: :member
+        get :services_by_vehicle_type, on: :member
+        get :employees_by_role, on: :member
+        get :company_employees, on: :member
       end
 
       resources :services
 
       resources :categories
 
+      resources :orders do
+        post :create_order_by_quote, on: :collection
+        get :user_orders, on: :collection
+        get :user_quotes, on: :collection
+        get :company_orders, on: :collection
+        get :company_quotes, on: :collection
+        get :by_assigned_to, on: :collection
+        patch :add_user_company, on: :member
+      end
+
+      resources :services_orders do
+        post :create_in_batch, on: :collection
+        patch :update_services_orders_status, on: :collection
+      end
+
+      resources :advances do
+        post :attach_image, on: :member
+        get :service_order_advances, on: :collection
+      end
+
       resources :users_companies do
         get :admin, on: :member
         get :company_users, on: :collection
         put :toggle_active, on: :member
         get :validate_user_company, on: :collection
+        get :user_company_by_user_and_company, on: :collection
       end
 
       resources :quotes do
         get :services, on: :member
         get :by_user, on: :collection
+        patch :close_quotes, on: :member
       end
 
       namespace :super_admin do

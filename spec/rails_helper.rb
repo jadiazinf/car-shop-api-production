@@ -35,10 +35,10 @@ end
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   #  DatabaseCleaner.strategy = :truncation
-  DatabaseCleaner.clean_with(:truncation)
-  config.fixture_paths = [
-    Rails.root.join('spec/fixtures')
-  ]
+  # DatabaseCleaner.clean_with(:truncation)
+  # config.fixture_paths = [
+  #   Rails.root.join('spec/fixtures')
+  # ]
   config.include Devise::Test::IntegrationHelpers, type: :request
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your

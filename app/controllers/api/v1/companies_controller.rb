@@ -1,13 +1,15 @@
 class Api::V1::CompaniesController < ApplicationController # rubocop:disable Metrics/ClassLength
   before_action :authenticate_user!, unless: :devise_controller?,
                                      only: %i[create update roles_by_company]
-  before_action :authorize_admin!, only: %i[update]
+  before_action :authorize_admin!, only: %i[update employees_by_role]
   before_action :authorize_admin_or_superadmin!, only: %i[set_profile_image]
   before_action :set_location, only: %i[create]
   before_action :set_company,
                 only: %i[show update company_charter company_images roles_by_company
-                         set_profile_image services]
+                         set_profile_image services services_by_vehicle_type employees_by_role
+                         company_employees]
   before_action :allow_iframe, only: %i[company_charter company_images]
+  before_action :verify_user_company, only: %i[employees_by_role company_employees]
 
   def index
     @companies = Company.all.page(params[:page].to_i)
@@ -83,6 +85,31 @@ class Api::V1::CompaniesController < ApplicationController # rubocop:disable Met
                               is_active: true).includes(:category).page(params[:page])
   end
 
+  def services_by_vehicle_type
+    vehicle_type = params[:vehicle_type]
+    price_column = "price_for_#{vehicle_type}"
+
+    @services = Service
+      .where(company_id: @company.id, is_active: true)
+      .where.not(price_column => [nil, 0])
+      .includes(:category)
+      .page(params[:page])
+
+    render :services, status: :ok
+  end
+
+  def employees_by_role
+    users_company = UserCompany.includes(:user).where(company_id: @company.id)
+      .where('roles @> ARRAY[?]::varchar[]', params[:role])
+
+    render json: users_company.as_json(include: :user), status: :ok
+  end
+
+  def company_employees
+    @users_companies = UserCompany.includes(:user).where(company_id: @company.id, is_active: true)
+      .page(params[:page])
+  end
+
   private
 
   def set_company
@@ -122,5 +149,12 @@ class Api::V1::CompaniesController < ApplicationController # rubocop:disable Met
 
   def allow_iframe
     response.headers['X-Frame-Options'] = 'ALLOWALL'
+  end
+
+  def verify_user_company
+    user_company = UserCompany.find_by(user_id: current_user.id, company_id: @company.id)
+    return unless user_company.nil?
+
+    render json: { errors: ['Not found'] }, status: :not_found
   end
 end

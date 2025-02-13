@@ -1,8 +1,8 @@
 class Vehicle < ApplicationRecord
   belongs_to :model
   belongs_to :user, optional: true
-  has_many :quotes, dependent: :destroy
   has_many_attached :vehicle_images
+  has_many :orders, dependent: :nullify
 
   ERRORS_KEY = 'active_record.errors.general'.freeze
 

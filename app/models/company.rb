@@ -7,6 +7,7 @@ class Company < ApplicationRecord
   has_one_attached :profile_image
   has_many_attached :company_images
   has_many :services, dependent: :destroy
+  has_many :orders, dependent: :destroy
 
   ERRORS_KEY = 'active_record.errors.general'.freeze
 

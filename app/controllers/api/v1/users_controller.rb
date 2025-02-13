@@ -39,6 +39,11 @@ class Api::V1::UsersController < ApplicationController
     @vehicles = user.vehicles.where(is_active: true).includes(model: %i[brand]).page(params[:page])
   end
 
+  def all_vehicles
+    @vehicles = current_user.vehicles.where(is_active: true).includes(model: %i[brand])
+    render json: @vehicles.as_json(include: { model: { include: :brand } }), status: :ok
+  end
+
   private
 
   def user_params

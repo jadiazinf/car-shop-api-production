@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_21_162822) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_09_172502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -41,6 +41,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_21_162822) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "advances", force: :cascade do |t|
+    t.string "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "service_order_id", null: false
+    t.index ["service_order_id"], name: "index_advances_on_service_order_id"
   end
 
   create_table "brands", force: :cascade do |t|
@@ -104,19 +112,21 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_21_162822) do
     t.index ["brand_id"], name: "index_models_on_brand_id"
   end
 
-  create_table "quotes", force: :cascade do |t|
-    t.string "group_id", null: false
-    t.decimal "total_cost", precision: 10, scale: 2, null: false
-    t.date "date", default: -> { "CURRENT_DATE" }, null: false
-    t.string "note"
-    t.string "status_by_company"
-    t.string "status_by_client"
+  create_table "orders", force: :cascade do |t|
+    t.string "status", null: false
+    t.decimal "vehicle_mileage", precision: 10, scale: 2, null: false
+    t.boolean "is_active", default: true, null: false
+    t.boolean "is_checked", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "vehicle_id"
-    t.bigint "service_id"
-    t.index ["service_id"], name: "index_quotes_on_service_id"
-    t.index ["vehicle_id"], name: "index_quotes_on_vehicle_id"
+    t.bigint "vehicle_id", null: false
+    t.bigint "company_id"
+    t.bigint "created_by_id"
+    t.bigint "assigned_to_id"
+    t.index ["assigned_to_id"], name: "index_orders_on_assigned_to_id"
+    t.index ["company_id"], name: "index_orders_on_company_id"
+    t.index ["created_by_id"], name: "index_orders_on_created_by_id"
+    t.index ["vehicle_id"], name: "index_orders_on_vehicle_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -133,6 +143,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_21_162822) do
     t.bigint "company_id"
     t.index ["category_id"], name: "index_services_on_category_id"
     t.index ["company_id"], name: "index_services_on_company_id"
+  end
+
+  create_table "services_orders", force: :cascade do |t|
+    t.decimal "cost", precision: 10, scale: 2, null: false
+    t.string "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "order_id", null: false
+    t.bigint "service_id", null: false
+    t.index ["order_id"], name: "index_services_orders_on_order_id"
+    t.index ["service_id"], name: "index_services_orders_on_service_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -209,13 +230,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_21_162822) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "advances", "services_orders", column: "service_order_id"
   add_foreign_key "companies", "locations"
   add_foreign_key "locations", "locations", column: "parent_location_id"
   add_foreign_key "models", "brands"
-  add_foreign_key "quotes", "services"
-  add_foreign_key "quotes", "vehicles"
+  add_foreign_key "orders", "companies"
+  add_foreign_key "orders", "users_companies", column: "assigned_to_id"
+  add_foreign_key "orders", "users_companies", column: "created_by_id"
+  add_foreign_key "orders", "vehicles", on_delete: :nullify
   add_foreign_key "services", "categories"
   add_foreign_key "services", "companies"
+  add_foreign_key "services_orders", "orders"
+  add_foreign_key "services_orders", "services"
   add_foreign_key "users", "locations"
   add_foreign_key "users_companies", "companies"
   add_foreign_key "users_companies", "users"

@@ -18,6 +18,7 @@ else
   json.year @vehicle.year
   json.brand @vehicle.model.brand
   json.vehicle_type @vehicle.vehicle_type
+  json.user @vehicle.user
   json.model do
     json.id @vehicle.model.id
     json.name @vehicle.model.name
