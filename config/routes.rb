@@ -96,6 +96,14 @@ Rails.application.routes.draw do
         patch :close_quotes, on: :member
       end
 
+      resources :user_order_reviews do
+        get :company_reviews, on: :collection
+        get :user_reviews, on: :collection
+        get :company_claims, on: :collection
+        get :by_order, on: :collection
+        get :company_ratings, on: :collection
+      end
+
       namespace :super_admin do
         resources :brands do
           collection do

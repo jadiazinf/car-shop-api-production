@@ -14,8 +14,8 @@ else
       json.created_at @order.assigned_to.created_at
       json.updated_at @order.assigned_to.updated_at
       json.user do
-        json.extract! @order.assigned_to.user, :id, :email, :first_name, :last_name, :dni, :birthdate,
-                      :address, :phone_number, :is_active, :gender, :location_id
+        json.extract! @order.assigned_to.user, :id, :email, :first_name, :last_name, :dni,
+                      :birthdate, :address, :phone_number, :is_active, :gender, :location_id
       end
     end
   end

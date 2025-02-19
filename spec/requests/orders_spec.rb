@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe 'Brands' do # rubocop:disable RSpec/MultipleMemoizedHelpers
+RSpec.describe 'Orders' do # rubocop:disable RSpec/MultipleMemoizedHelpers
   let(:vehicle) { create(:vehicle) }
   let(:admin) { create(:user_company, :valid_admin) }
-  let(:order_a) { create(:order, vehicle:) }
+  let(:order_a) { create(:order, vehicle:, company: admin.company) }
   let(:quote_a) { create(:order, :quote_created_by_company, vehicle:, company: order_a.company) }
   let(:order_b) { create(:order, vehicle:, company: order_a.company) }
   let(:order_c) { create(:order, vehicle:, company: order_a.company) }
