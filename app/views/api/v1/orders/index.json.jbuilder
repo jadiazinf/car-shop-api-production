@@ -16,7 +16,7 @@ json.data do # rubocop:disable Metrics/BlockLength
     json.company_id order.company_id
     json.is_checked order.is_checked
     json.services_orders do
-      json.array! order.services_orders do |service_order|
+      json.array! order.service_orders do |service_order|
         json.id service_order.id
         json.cost service_order.cost
         json.status service_order.status

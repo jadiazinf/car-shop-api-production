@@ -10,7 +10,7 @@ class Orders::GetUserQuotes
   end
 
   def perform # rubocop:disable Metrics/AbcSize
-    orders = Order.joins(:vehicle).includes(:services_orders, :vehicle, :company)
+    orders = Order.joins(:vehicle).includes(:service_orders, :vehicle, :company)
       .where(vehicles: { user_id: }).order(:created_at)
     orders = orders.where(status:) unless status.nil?
     orders = orders.where(vehicle_id:) unless vehicle_id.nil?

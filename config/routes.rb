@@ -104,6 +104,16 @@ Rails.application.routes.draw do
         get :company_ratings, on: :collection
       end
 
+      resources :reports do
+        get :orders_with_claims, on: :collection
+        get :orders_without_claims, on: :collection
+        get :claims_by_service_category, on: :collection
+        get :claims_by_period, on: :collection
+        get :customers_served_by_period, on: :collection
+        get :captured_customers_percentage_by_period, on: :collection
+        get :captured_customers_by_service_category_and_period, on: :collection
+      end
+
       namespace :super_admin do
         resources :brands do
           collection do
