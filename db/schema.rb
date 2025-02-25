@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_17_163043) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_21_171826) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -110,6 +110,25 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_17_163043) do
     t.datetime "updated_at", null: false
     t.bigint "brand_id"
     t.index ["brand_id"], name: "index_models_on_brand_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.string "category", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "advance_id"
+    t.bigint "user_id"
+    t.index ["advance_id"], name: "index_notifications_on_advance_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
+  create_table "notifications_receipts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "notification_id"
+    t.bigint "user_id"
+    t.index ["notification_id"], name: "index_notifications_receipts_on_notification_id"
+    t.index ["user_id"], name: "index_notifications_receipts_on_user_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -243,6 +262,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_17_163043) do
   add_foreign_key "companies", "locations"
   add_foreign_key "locations", "locations", column: "parent_location_id"
   add_foreign_key "models", "brands"
+  add_foreign_key "notifications", "advances"
+  add_foreign_key "notifications", "users"
+  add_foreign_key "notifications_receipts", "notifications"
+  add_foreign_key "notifications_receipts", "users"
   add_foreign_key "orders", "companies"
   add_foreign_key "orders", "users_companies", column: "assigned_to_id"
   add_foreign_key "orders", "users_companies", column: "created_by_id"

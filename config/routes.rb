@@ -114,6 +114,10 @@ Rails.application.routes.draw do
         get :captured_customers_by_service_category_and_period, on: :collection
       end
 
+      resources :notifications do
+        get :unread_notifications, on: :collection
+      end
+
       namespace :super_admin do
         resources :brands do
           collection do

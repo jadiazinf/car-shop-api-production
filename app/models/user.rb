@@ -3,7 +3,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
+  has_many :notifications, dependent: :destroy
   has_many :vehicles, dependent: :nullify
+
+  has_many :notification_receipts, dependent: :destroy
 
   has_many :user_companies, dependent: :destroy
   has_many :companies, through: :user_companies

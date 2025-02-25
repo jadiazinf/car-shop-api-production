@@ -15,6 +15,7 @@ class Api::V1::AdvancesController < ApplicationController
   def create
     @advance = Advance.new(advance_params)
     if @advance.save
+      Notifications::CreateByAdvance.new(@advance.id).perform
       render :show, status: :created
     else
       render json: { errors: @advance.errors }, status: :unprocessable_entity
