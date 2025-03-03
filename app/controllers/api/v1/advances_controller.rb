@@ -5,6 +5,7 @@ class Api::V1::AdvancesController < ApplicationController
   before_action :set_company, only: %i[show service_order_advances]
 
   def show
+    UsersActivitiesLogs::Create.new(current_user, 'Show order advance').perform
     if @advance.belongs_to_user?(current_user) || @advance.belongs_to_company?(@company)
       render :show, status: :ok
     else
@@ -13,6 +14,7 @@ class Api::V1::AdvancesController < ApplicationController
   end
 
   def create
+    UsersActivitiesLogs::Create.new(current_user, 'Create order advance').perform
     @advance = Advance.new(advance_params)
     if @advance.save
       Notifications::CreateByAdvance.new(@advance.id).perform
@@ -23,6 +25,7 @@ class Api::V1::AdvancesController < ApplicationController
   end
 
   def attach_image
+    UsersActivitiesLogs::Create.new(current_user, 'Attach order advance image').perform
     advance_params_for_image[:advance_images].each do |image|
       @advance.advance_images.attach(image)
     end
@@ -31,6 +34,7 @@ class Api::V1::AdvancesController < ApplicationController
   end
 
   def service_order_advances
+    UsersActivitiesLogs::Create.new(current_user, 'Show order advances').perform
     if @service_order.belongs_to_user?(current_user) || @service_order.belongs_to_company?(@company)
       @advances = Advance.where(service_order_id: params[:service_order_id])
       render :index, status: :ok

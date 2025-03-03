@@ -5,6 +5,7 @@ class Api::V1::ServicesOrdersController < ApplicationController
   def index; end
 
   def show
+    UsersActivitiesLogs::Create.new(current_user, 'Show a service order info').perform
     company = Company.find(params[:company_id])
     if @service_order.belongs_to_user?(current_user) || @service_order.belongs_to_company?(company)
       render :show, status: :ok

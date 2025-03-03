@@ -9,6 +9,7 @@ class Api::V1::ServicesController < ApplicationController
   def show; end
 
   def create
+    UsersActivitiesLogs::Create.new(current_user, 'Create a company service').perform
     @service = Service.new(service_params.merge(is_active: true))
 
     if @service.save
@@ -19,6 +20,7 @@ class Api::V1::ServicesController < ApplicationController
   end
 
   def update
+    UsersActivitiesLogs::Create.new(current_user, 'Update a company service').perform
     if @service.update(service_params)
       render :show, status: :ok
     else

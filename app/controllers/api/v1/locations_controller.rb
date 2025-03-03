@@ -4,12 +4,14 @@ class Api::V1::LocationsController < ApplicationController
   before_action :set_location, only: %i[show update toggle_active]
 
   def index
+    UsersActivitiesLogs::Create.new(current_user, 'list locations').perform
     @locations = Location.where(is_active: true)
   end
 
   def show; end
 
   def create
+    UsersActivitiesLogs::Create.new(current_user, 'Create a new location').perform
     @location = Location.new(location_params)
     if @location.save
       render :show, status: :created
@@ -19,6 +21,7 @@ class Api::V1::LocationsController < ApplicationController
   end
 
   def update
+    UsersActivitiesLogs::Create.new(current_user, 'Update location').perform
     if @location.update(location_params)
       render_success_response(@locations)
     else
@@ -27,6 +30,7 @@ class Api::V1::LocationsController < ApplicationController
   end
 
   def toggle_active
+    UsersActivitiesLogs::Create.new(current_user, 'Toggle active state for a location').perform
     location_services = Locations::ToggleActive.new(@location, location_params[:active])
     location_services.perform
     render_success_response(@location)

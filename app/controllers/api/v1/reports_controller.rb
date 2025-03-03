@@ -3,6 +3,7 @@ class Api::V1::ReportsController < ApplicationController
   before_action :validate_user
 
   def orders_with_claims
+    UsersActivitiesLogs::Create.new(current_user, 'list orders with claims report').perform
     orders_with_claims = Order
       .joins(:user_order_review)
       .where(company_id: params[:company_id], user_order_reviews: { rating: ...3 })
@@ -13,6 +14,7 @@ class Api::V1::ReportsController < ApplicationController
   end
 
   def orders_without_claims
+    UsersActivitiesLogs::Create.new(current_user, 'list orders without claims report').perform
     orders_without_claims = Order.left_joins(:user_order_review)
       .where(company_id: params[:company_id], status: %i[finished canceled])
       .where('user_order_reviews.rating IS NULL OR user_order_reviews.rating >= 3')
@@ -23,6 +25,7 @@ class Api::V1::ReportsController < ApplicationController
   end
 
   def claims_by_service_category
+    UsersActivitiesLogs::Create.new(current_user, 'list orders with claims report').perform
     claims_by_service_category = UserOrderReview
       .joins(order: { services: :category })
       .where(order: { company_id: params[:company_id] })
@@ -34,6 +37,7 @@ class Api::V1::ReportsController < ApplicationController
   end
 
   def claims_by_period
+    UsersActivitiesLogs::Create.new(current_user, 'List claims by period report').perform
     claims_by_period = UserOrderReview
       .joins(:order)
       .where(order: { company_id: params[:company_id] })
@@ -45,6 +49,7 @@ class Api::V1::ReportsController < ApplicationController
   end
 
   def customers_served_by_period
+    UsersActivitiesLogs::Create.new(current_user, 'list customers served by period report').perform
     customers_served_by_period = Order
       .where(company_id: params[:company_id])
       .where(created_at: params[:start_date]..params[:end_date])
@@ -55,6 +60,8 @@ class Api::V1::ReportsController < ApplicationController
   end
 
   def captured_customers_percentage_by_period # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    UsersActivitiesLogs::Create.new(current_user,
+                                    'list catpured customers percentage report').perform
     total_orders = Order
       .where(company_id: params[:company_id],
              created_at: params[:start_date]..params[:end_date])
@@ -78,7 +85,8 @@ class Api::V1::ReportsController < ApplicationController
                                                               captured_orders: } }, status: :ok
   end
 
-  def captured_customers_by_service_category_and_period # rubocop:disable Metrics/MethodLength
+  def captured_customers_by_service_category_and_period # rubocop:disable Metrics/AbcSize
+    UsersActivitiesLogs::Create.new(current_user, 'list captured customers report').perform
     captured_customers_by_service_category_and_period = Service
       .joins(:service_orders)
       .joins(service_orders: :order)

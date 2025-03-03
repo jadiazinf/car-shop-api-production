@@ -26,6 +26,7 @@ class Api::V1::RegistrationsController < Devise::RegistrationsController
   end
 
   def handle_login_request
+    UsersActivitiesLogs::Create.new(current_user, 'Login request').perform
     Users::AuthService.new(email: params[:user][:email],
                            password: params[:user][:password]).handle_login_request
   end

@@ -1,5 +1,5 @@
 class Api::V1::UsersCompaniesRequestsController < ApplicationController
-  def index # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def index # rubocop:disable Metrics/AbcSize
     @requests = if params[:status].present?
                   UserCompanyRequest
                     .includes(user_company: %i[user company])
@@ -15,6 +15,7 @@ class Api::V1::UsersCompaniesRequestsController < ApplicationController
   end
 
   def show
+    UsersActivitiesLogs::Create.new(current_user, 'Show a company request for registration').perform
     @request = UserCompanyRequest.includes(user_company: { user: [], company: [:location] })
       .find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
@@ -22,6 +23,7 @@ class Api::V1::UsersCompaniesRequestsController < ApplicationController
   end
 
   def show_by_company_id
+    UsersActivitiesLogs::Create.new(current_user, 'Show registration requests to a company').perform
     @requests = if params[:status].present?
                   company_requests_by_status
                 else
@@ -31,7 +33,8 @@ class Api::V1::UsersCompaniesRequestsController < ApplicationController
     render json: { error: e.message }, status: :not_found
   end
 
-  def update
+  def update # rubocop:disable Metrics/AbcSize
+    UsersActivitiesLogs::Create.new(current_user, 'Update company registration request').perform
     id = params[:id]
     service = UsersCompaniesRequests::Update.new(company_creation_request_params.merge(id:))
     service.perform

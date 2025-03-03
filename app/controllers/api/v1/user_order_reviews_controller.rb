@@ -10,6 +10,7 @@ class Api::V1::UserOrderReviewsController < ApplicationController
   def show; end
 
   def create
+    UsersActivitiesLogs::Create.new(current_user, 'Create an user order review').perform
     @user_order_review = UserOrderReview.new(user_order_review_params)
 
     if @user_order_review.save
@@ -20,6 +21,7 @@ class Api::V1::UserOrderReviewsController < ApplicationController
   end
 
   def company_reviews
+    UsersActivitiesLogs::Create.new(current_user, 'list company orders reviews').perform
     @user_order_reviews = UserOrderReview
       .includes(order: [:assigned_to])
       .joins(order: %i[company vehicle assigned_to: [user]])
@@ -31,6 +33,7 @@ class Api::V1::UserOrderReviewsController < ApplicationController
   end
 
   def user_reviews
+    UsersActivitiesLogs::Create.new(current_user, 'list user orders reviews').perform
     @user_order_reviews = UserOrderReview
       .includes(order: [:assigned_to])
       .joins(order: :vehicle)
@@ -42,6 +45,7 @@ class Api::V1::UserOrderReviewsController < ApplicationController
   end
 
   def company_claims
+    UsersActivitiesLogs::Create.new(current_user, 'list company claims').perform
     @user_order_reviews = UserOrderReview
       .includes(order: [:assigned_to])
       .joins(:order)
@@ -54,6 +58,7 @@ class Api::V1::UserOrderReviewsController < ApplicationController
   end
 
   def by_order
+    UsersActivitiesLogs::Create.new(current_user, 'list reviews by order').perform
     @user_order_review = UserOrderReview.find_by(order_id: params[:order_id])
     if @user_order_review.nil?
       render json: { user_order_review: nil }, status: :ok
@@ -64,6 +69,7 @@ class Api::V1::UserOrderReviewsController < ApplicationController
   end
 
   def company_ratings
+    UsersActivitiesLogs::Create.new(current_user, 'list company ratings').perform
     results = UserOrderReview
       .joins(order: :company)
       .where(companies: { id: params[:company_id] })

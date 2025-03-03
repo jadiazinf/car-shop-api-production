@@ -15,9 +15,12 @@ class Api::V1::CompaniesController < ApplicationController # rubocop:disable Met
     @companies = Company.all.page(params[:page].to_i)
   end
 
-  def show; end
+  def show
+    UsersActivitiesLogs::Create.new(current_user, 'get company info').perform
+  end
 
   def create
+    UsersActivitiesLogs::Create.new(current_user, 'create company').perform
     service = Companies::Create.new(company_params
                                                   .except(:location_id)
                                                   .merge(user: current_user, location: @location))
@@ -31,6 +34,7 @@ class Api::V1::CompaniesController < ApplicationController # rubocop:disable Met
   end
 
   def update
+    UsersActivitiesLogs::Create.new(current_user, 'update company').perform
     service = Companies::Update.new(company_params.merge(company: @company, user: current_user))
     response = service.perform
     if response[:ok]
@@ -61,6 +65,7 @@ class Api::V1::CompaniesController < ApplicationController # rubocop:disable Met
   end
 
   def set_profile_image
+    UsersActivitiesLogs::Create.new(current_user, 'set company profile image').perform
     result = Companies::SetProfileImage.new(params[:id], company_params[:profile_image]).perform
     if result.first
       profile_image_url = url_for(@company.profile_image)
@@ -74,6 +79,7 @@ class Api::V1::CompaniesController < ApplicationController # rubocop:disable Met
     if params[:page].blank?
       render json: { error: ['Page is required'] }, status: :bad_request
     else
+      UsersActivitiesLogs::Create.new(current_user, 'search company with filters').perform
       @companies = Companies::SearchFilters.new(params).perform
       @companies = @companies.blank? ? [] : @companies.page(params[:page])
       render :index, status: :ok
@@ -99,6 +105,7 @@ class Api::V1::CompaniesController < ApplicationController # rubocop:disable Met
   end
 
   def employees_by_role
+    UsersActivitiesLogs::Create.new(current_user, 'list company employees by role').perform
     users_company = UserCompany.includes(:user).where(company_id: @company.id)
       .where('roles @> ARRAY[?]::varchar[]', params[:role])
 
@@ -106,6 +113,7 @@ class Api::V1::CompaniesController < ApplicationController # rubocop:disable Met
   end
 
   def company_employees
+    UsersActivitiesLogs::Create.new(current_user, 'list company employees').perform
     @users_companies = UserCompany.includes(:user).where(company_id: @company.id, is_active: true)
       .page(params[:page])
   end

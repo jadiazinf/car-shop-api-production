@@ -2,9 +2,12 @@ class Api::V1::VehiclesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_vehicle, only: %i[update attach_images show toggle_active]
 
-  def show; end
+  def show
+    UsersActivitiesLogs::Create.new(current_user, 'Show vehicle info').perform
+  end
 
   def create
+    UsersActivitiesLogs::Create.new(current_user, 'Create user vehicle').perform
     service = Vehicles::Create.new(vehicle_params)
     valid, errors, @vehicle = service.perform
     render json: { errors: }, status: :unprocessable_entity unless valid
@@ -13,6 +16,7 @@ class Api::V1::VehiclesController < ApplicationController
   end
 
   def update
+    UsersActivitiesLogs::Create.new(current_user, 'Update user vehicle').perform
     if @vehicle.update(vehicle_params)
       render :show, status: :ok
     else

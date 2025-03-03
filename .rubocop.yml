@@ -8,14 +8,14 @@ AllCops:
   NewCops: enable
   Exclude:
     # Auto-generated files
-    - 'bin/*'
-    - 'db/schema.rb'
+    - "bin/*"
+    - "db/schema.rb"
 
     # Temp files
-    - 'tmp/**/*'
+    - "tmp/**/*"
 
     # vendor dir is used by most CI services
-    - 'vendor/**/*'
+    - "vendor/**/*"
 
   TargetRubyVersion: 3.1.2
 
@@ -33,6 +33,7 @@ Metrics/AbcSize:
     - config/routes/*.rb # Routes
 
 Metrics/MethodLength:
+  Max: 15
   Exclude:
     - config/routes/*.rb # Routes
     - db/migrate/*.rb # Migrations
@@ -40,16 +41,16 @@ Metrics/MethodLength:
 Metrics/BlockLength:
   Exclude:
     - config/routes/*.rb # Routes
-    - config/routes.rb   # Routes
+    - config/routes.rb # Routes
     - lib/tasks/*/*
   AllowedMethods:
     - configure # Configurations
-    - context   # Specs
-    - describe  # Specs
+    - context # Specs
+    - describe # Specs
     - namespace # Tasks
-    - task      # Tasks
-    - included  # Model and controller concerns
-    - setup     # Devise
+    - task # Tasks
+    - included # Model and controller concerns
+    - setup # Devise
 
 Metrics/ModuleLength:
   Exclude:
@@ -59,7 +60,7 @@ Style/ClassAndModuleChildren:
   EnforcedStyle: compact
 
 Style/Documentation:
-    Enabled: false
+  Enabled: false
 
 Style/FrozenStringLiteralComment:
   Enabled: false

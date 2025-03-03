@@ -10,10 +10,12 @@ class Api::V1::OrdersController < ApplicationController # rubocop:disable Metric
                 only: %i[show update add_user_company add_user_company]
 
   def index
+    UsersActivitiesLogs::Create.new(current_user, 'list orders').perform
     @orders = @company.orders.where(is_active: true).page(params[:page])
   end
 
   def show
+    UsersActivitiesLogs::Create.new(current_user, 'Show an order info').perform
     if @order.belongs_to_user?(current_user) || @order.belongs_to_company?(@company)
       render :show, status: :ok
     else
@@ -22,6 +24,7 @@ class Api::V1::OrdersController < ApplicationController # rubocop:disable Metric
   end
 
   def create
+    UsersActivitiesLogs::Create.new(current_user, 'Create order').perform
     service = Orders::Create.new(order_params)
     is_valid, data, services_orders_errors = service.perform
     if is_valid
@@ -32,6 +35,7 @@ class Api::V1::OrdersController < ApplicationController # rubocop:disable Metric
   end
 
   def update
+    UsersActivitiesLogs::Create.new(current_user, 'Update order').perform
     if @order.belongs_to_company?(@company)
       @order.update(order_params)
       render :show, status: :ok
@@ -41,6 +45,7 @@ class Api::V1::OrdersController < ApplicationController # rubocop:disable Metric
   end
 
   def company_orders
+    UsersActivitiesLogs::Create.new(current_user, 'List company orders for company member').perform
     if @user_company.company_id == @company.id && @user_company.is_active
       response = Orders::GetCompanyOrders.new(params).perform
       @orders = response.page(params[:page])
@@ -51,6 +56,7 @@ class Api::V1::OrdersController < ApplicationController # rubocop:disable Metric
   end
 
   def company_quotes
+    UsersActivitiesLogs::Create.new(current_user, 'List company quotes for company member').perform
     if (@user_company.company_id == @company.id) && @user_company.is_active
       response = Orders::GetCompanyQuotes.new(params).perform
       @orders = response.page(params[:page])
@@ -61,6 +67,7 @@ class Api::V1::OrdersController < ApplicationController # rubocop:disable Metric
   end
 
   def user_orders
+    UsersActivitiesLogs::Create.new(current_user, 'list orders for user').perform
     response = Orders::GetUserOrders.new(params.except(:user_id).merge(user_id: current_user.id))
       .perform
     @orders = response.page(params[:page])
@@ -68,6 +75,7 @@ class Api::V1::OrdersController < ApplicationController # rubocop:disable Metric
   end
 
   def user_quotes
+    UsersActivitiesLogs::Create.new(current_user, 'list quotes for user').perform
     response = Orders::GetUserQuotes.new(params.except(:user_id).merge(user_id: current_user.id))
       .perform
     @orders = response.page(params[:page])
@@ -87,6 +95,7 @@ class Api::V1::OrdersController < ApplicationController # rubocop:disable Metric
   end
 
   def by_assigned_to
+    UsersActivitiesLogs::Create.new(current_user, 'list technician orders').perform
     response = Orders::OrdersByAssignedTo.new(params).perform
     @orders = response.page(params[:page])
     render :index, status: :ok

@@ -3,6 +3,7 @@ class Api::V1::SessionsController < Devise::SessionsController
   respond_to :json
 
   def create
+    UsersActivitiesLogs::Create.new(current_user, 'Create user session').perform
     self.resource = warden.authenticate!(auth_options)
     set_flash_message!(:notice, :signed_in)
     sign_in(resource_name, resource)

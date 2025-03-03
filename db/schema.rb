@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_21_171826) do
+ActiveRecord::Schema[7.1].define(version: 2025_02_28_154415) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -208,6 +208,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_21_171826) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "users_activities_logs", force: :cascade do |t|
+    t.string "event", null: false
+    t.string "user_category", null: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_users_activities_logs_on_user_id"
+  end
+
   create_table "users_companies", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "company_id", null: false
@@ -276,6 +285,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_21_171826) do
   add_foreign_key "services_orders", "services"
   add_foreign_key "user_order_reviews", "orders"
   add_foreign_key "users", "locations"
+  add_foreign_key "users_activities_logs", "users"
   add_foreign_key "users_companies", "companies"
   add_foreign_key "users_companies", "users"
   add_foreign_key "users_companies_requests", "users", column: "responder_user_id"

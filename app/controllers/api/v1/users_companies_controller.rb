@@ -6,9 +6,12 @@ class Api::V1::UsersCompaniesController < ApplicationController
   before_action :user_company_params, only: %i[create]
   before_action :set_user_company, only: %i[update show admin toggle_active]
 
-  def show; end
+  def show
+    UsersActivitiesLogs::Create.new(current_user, 'Show user company info').perform
+  end
 
   def create
+    UsersActivitiesLogs::Create.new(current_user, 'Create new company member').perform
     @user_company = UserCompany.new(user_company_params)
     if @user_company.save
       render :show, status: :created
@@ -18,6 +21,7 @@ class Api::V1::UsersCompaniesController < ApplicationController
   end
 
   def update
+    UsersActivitiesLogs::Create.new(current_user, 'Update company member').perform
     if @user_company.update!(user_company_params)
       render :show, status: :ok
     else
@@ -30,6 +34,7 @@ class Api::V1::UsersCompaniesController < ApplicationController
   end
 
   def company_users
+    UsersActivitiesLogs::Create.new(current_user, 'list company users').perform
     service = UsersCompanies::GetCompanyUsersFilter.new(name: params[:name],
                                                         company_id: params[:company_id],
                                                         page: params[:page])
@@ -37,12 +42,14 @@ class Api::V1::UsersCompaniesController < ApplicationController
   end
 
   def toggle_active
+    UsersActivitiesLogs::Create.new(current_user, 'Toggle active state for company member').perform
     @user_company.is_active = !@user_company.is_active
     @user_company.save!
     render json: { is_active: @user_company.is_active }
   end
 
   def validate_user_company
+    UsersActivitiesLogs::Create.new(current_user, 'Validate user company').perform
     service = UsersCompanies::ValidateUserCompany.new(params)
     result = service.perform
     if result

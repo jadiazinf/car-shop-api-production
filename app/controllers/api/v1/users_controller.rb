@@ -3,6 +3,7 @@ class Api::V1::UsersController < ApplicationController
   before_action :set_user, except: %i[new_token]
 
   def update
+    UsersActivitiesLogs::Create.new(current_user, 'Update user info').perform
     if @user.update(user_params)
       render :show, status: :ok
     else

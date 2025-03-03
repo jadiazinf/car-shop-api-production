@@ -17,6 +17,7 @@ class Api::V1::CategoriesController < ApplicationController
   def show; end
 
   def create
+    UsersActivitiesLogs::Create.new(current_user, 'Create category').perform
     @category = Category.new(category_params.merge(is_active: true))
 
     if @category.save
@@ -27,6 +28,7 @@ class Api::V1::CategoriesController < ApplicationController
   end
 
   def update
+    UsersActivitiesLogs::Create.new(current_user, 'Update category').perform
     if @category.update(category_params)
       render :show, status: :ok
     else
