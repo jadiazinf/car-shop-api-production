@@ -5,8 +5,11 @@ class User < ApplicationRecord
 
   has_many :notifications, dependent: :destroy
   has_many :vehicles, dependent: :nullify
+  has_many :average_response_times, dependent: :nullify
 
   has_many :notification_receipts, dependent: :destroy
+
+  has_one :user_referral, dependent: :destroy
 
   has_many :user_companies, dependent: :destroy
   has_many :companies, through: :user_companies

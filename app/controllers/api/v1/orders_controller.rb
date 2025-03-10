@@ -37,6 +37,7 @@ class Api::V1::OrdersController < ApplicationController # rubocop:disable Metric
   def update
     UsersActivitiesLogs::Create.new(current_user, 'Update order').perform
     if @order.belongs_to_company?(@company)
+      AverageResponseTimes::Create.new(@order).perform
       @order.update(order_params)
       render :show, status: :ok
     else

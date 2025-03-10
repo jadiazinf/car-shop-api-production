@@ -62,6 +62,8 @@ Rails.application.routes.draw do
 
       resources :categories
 
+      resources :user_referrals
+
       resources :orders do
         post :create_order_by_quote, on: :collection
         get :user_orders, on: :collection

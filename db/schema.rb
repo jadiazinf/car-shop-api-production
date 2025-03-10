@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_02_28_154415) do
+ActiveRecord::Schema[7.1].define(version: 2025_03_10_171405) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -49,6 +49,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_28_154415) do
     t.datetime "updated_at", null: false
     t.bigint "service_order_id", null: false
     t.index ["service_order_id"], name: "index_advances_on_service_order_id"
+  end
+
+  create_table "average_response_times", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "order_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_average_response_times_on_company_id"
+    t.index ["order_id"], name: "index_average_response_times_on_order_id"
+    t.index ["user_id"], name: "index_average_response_times_on_user_id"
   end
 
   create_table "brands", force: :cascade do |t|
@@ -184,6 +195,14 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_28_154415) do
     t.index ["order_id"], name: "index_user_order_reviews_on_order_id"
   end
 
+  create_table "user_referrals", force: :cascade do |t|
+    t.string "referral_by", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_referrals_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -268,6 +287,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_28_154415) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "advances", "services_orders", column: "service_order_id"
+  add_foreign_key "average_response_times", "companies"
+  add_foreign_key "average_response_times", "orders"
+  add_foreign_key "average_response_times", "users"
   add_foreign_key "companies", "locations"
   add_foreign_key "locations", "locations", column: "parent_location_id"
   add_foreign_key "models", "brands"
@@ -284,6 +306,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_02_28_154415) do
   add_foreign_key "services_orders", "orders"
   add_foreign_key "services_orders", "services"
   add_foreign_key "user_order_reviews", "orders"
+  add_foreign_key "user_referrals", "users"
   add_foreign_key "users", "locations"
   add_foreign_key "users_activities_logs", "users"
   add_foreign_key "users_companies", "companies"
