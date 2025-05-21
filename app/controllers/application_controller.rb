@@ -30,6 +30,13 @@ class ApplicationController < ActionController::API
     render_forbidden
   end
 
+  def authorize_admin_and_supervisor!
+    user_roles = current_user.roles(params[:company_id])
+    return if user_roles.include?('admin') || user_roles.include?('supervisor')
+
+    render_forbidden
+  end
+
   def authorize_superadmin!
     user_roles = current_user.roles(params[:company_id])
     return if user_roles.include?('superadmin')
