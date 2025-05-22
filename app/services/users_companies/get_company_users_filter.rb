@@ -1,51 +1,49 @@
 class UsersCompanies::GetCompanyUsersFilter
-  attr_accessor :name, :company_id, :page
+  attr_accessor :name, :status, :roles, :company_id, :dni
 
   def initialize(params)
-    @name = params[:name]
+    @name = params[:name].to_s.strip
+    @status = params[:status].to_s.strip
+    @roles = params[:roles].to_s.strip
+    @dni = params[:dni].to_s.strip
     @company_id = params[:company_id]
-    @page = params[:page]
   end
 
   def perform
-    user_companies = if name.present?
-                       filter_users
-                     else
-                       fetch_user_companies
-                     end
+    user_company = base_scope
 
-    Kaminari.paginate_array(transform_data(user_companies), total_count: user_companies.total_count)
-      .page(user_companies.current_page)
-      .per(user_companies.limit_value)
+    user_company = filter_by_name(user_company) unless name.empty?
+    user_company = filter_by_dni(user_company) unless dni.empty?
+    user_company = filter_by_roles(user_company) unless roles.empty?
+    user_company = filter_by_is_active(user_company) unless status.empty?
+
+    user_company
   end
 
   private
 
-  def fetch_user_companies
-    UserCompany.includes(:user)
-      .where(company_id:, is_active: true)
-      .page(page)
+  def base_scope
+    UserCompany.includes(:user).where(company_id:, is_active: true)
   end
 
-  def filter_users
-    query_string = "unaccent(users.first_name || ' ' || users.last_name) ILIKE unaccent(?)"
-    UserCompany.joins(:user)
-      .where(company_id:, is_active: true)
-      .where(query_string, "%#{name}%")
-      .includes(:user)
-      .page(page)
+  def filter_by_name(user_company)
+    user_company.joins(:user)
+      .where('unaccent(LOWER(users.first_name)) LIKE unaccent(?) OR ' +
+      'unaccent(LOWER(users.last_name)) LIKE unaccent(?)',
+      "%#{name.downcase}%", "%#{name.downcase}%")
   end
 
-  def transform_data(users)
-    users.map do |user_company|
-      {
-        id: user_company.id,
-        roles: user_company.roles,
-        is_active: user_company.is_active,
-        user_id: user_company.user_id,
-        company_id: user_company.company_id,
-        user: user_company.user&.attributes&.symbolize_keys
-      }
-    end
+  def filter_by_dni(user_company)
+    user_company.joins(:user).where('LOWER(users.dni) LIKE ?', "%#{dni.downcase}%")
+  end
+
+  def filter_by_roles(user_company)
+    user_roles = roles.split(',')
+    user_company.joins(:user).where('roles && ARRAY[?]::varchar[]', user_roles)
+  end
+
+  def filter_by_is_active(user_company)
+    active = ActiveRecord::Type::Boolean.new.cast(status)
+    user_company.where(is_active: active)
   end
 end

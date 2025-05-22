@@ -35,10 +35,9 @@ class Api::V1::UsersCompaniesController < ApplicationController
 
   def company_users
     UsersActivitiesLogs::Create.new(current_user, 'list company users').perform
-    service = UsersCompanies::GetCompanyUsersFilter.new(name: params[:name],
-                                                        company_id: params[:company_id],
-                                                        page: params[:page])
+    service = UsersCompanies::GetCompanyUsersFilter.new(params)
     @users_company = service.perform
+    @users_company = @users_company.page(params[:page])
   end
 
   def toggle_active

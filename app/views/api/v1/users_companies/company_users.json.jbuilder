@@ -14,21 +14,21 @@ end
 
 json.data do
   json.array! @users_company do |user_company|
-    json.id user_company[:id]
-    json.company_id user_company[:company_id]
-    json.user_id user_company[:user_id]
+    json.id user_company.id
+    json.company_id user_company.company_id
+    json.user_id user_company.user_id
     json.user do
-      json.id user_company[:user][:id]
-      json.first_name user_company[:user][:first_name]
-      json.last_name user_company[:user][:last_name]
-      json.dni user_company[:user][:dni]
-      json.gender user_company[:user][:gender]
-      json.email user_company[:user][:email]
-      json.birthdate user_company[:user][:birthdate]
-      json.address user_company[:user][:address]
-      json.phone_number user_company[:user][:phone_number]
+      json.id user_company.user.id
+      json.first_name user_company.user.first_name
+      json.last_name user_company.user.last_name
+      json.dni user_company.user.dni
+      json.gender user_company.user.gender
+      json.email user_company.user.email
+      json.birthdate user_company.user.birthdate
+      json.address user_company.user.address
+      json.phone_number user_company.user.phone_number
     end
-    json.roles user_company[:roles]
-    json.is_active user_company[:is_active]
+    json.roles user_company.roles
+    json.is_active user_company.is_active
   end
 end
