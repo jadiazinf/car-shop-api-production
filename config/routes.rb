@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :users do
-        get :user_companies, on: :member
+        get :user_companies, on: :collection
         get :search_by_filters, on: :collection
         get :new_token, on: :member
         get :vehicles, on: :member

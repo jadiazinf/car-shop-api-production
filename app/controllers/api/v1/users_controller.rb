@@ -12,8 +12,8 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def user_companies
-    companies = UserCompany.where(user_id: @user.id, is_active: true).includes(:company)
-    render json: companies.as_json(include: :company), status: :ok
+    @companies = Users::UserCompaniesService.new(params.merge(user_id: current_user.id)).perform
+    @companies = @companies.page(params[:page])
   end
 
   def search_by_filters
