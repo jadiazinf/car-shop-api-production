@@ -1,17 +1,11 @@
 class Api::V1::UsersCompaniesRequestsController < ApplicationController
-  def index # rubocop:disable Metrics/AbcSize
-    @requests = if params[:status].present?
-                  UserCompanyRequest
-                    .includes(user_company: %i[user company])
-                    .where(status: params[:status])
-                    .order(created_at: :desc)
-                    .page(params[:page].to_i)
-                else
-                  UserCompanyRequest
-                    .includes(user_company: %i[user company])
-                    .order(created_at: :desc)
-                    .page(params[:page].to_i)
-                end
+  before_action :authenticate_user!
+  before_action :authorize_superadmin!, only: %i[index]
+  before_action :authorize_admin!, only: %i[show_by_company_id]
+
+  def index
+    @requests = UsersCompaniesRequests::GetAll.new(params).perform
+    @requests = @requests.page(params[:page].to_i)
   end
 
   def show
@@ -24,13 +18,8 @@ class Api::V1::UsersCompaniesRequestsController < ApplicationController
 
   def show_by_company_id
     UsersActivitiesLogs::Create.new(current_user, 'Show registration requests to a company').perform
-    @requests = if params[:status].present?
-                  company_requests_by_status
-                else
-                  all_company_requests
-                end
-  rescue ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :not_found
+    @requests = UsersCompaniesRequests::GetByCompany.new(params).perform
+    @requests = @requests.page(params[:page].to_i)
   end
 
   def update # rubocop:disable Metrics/AbcSize
