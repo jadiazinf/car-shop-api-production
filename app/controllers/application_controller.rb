@@ -1,8 +1,17 @@
 require Rails.root.join('app/services/jwt/jwt_wrapper')
+before_action :set_cors_headers
+
 class ApplicationController < ActionController::API
   respond_to :json
 
   private
+
+  def set_cors_headers
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Authorization, Content-Type'
+  end
+
 
   def validate_token(token)
     if token && token['sub'].present?
