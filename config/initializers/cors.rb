@@ -7,11 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins '*'
-
-    resource '*',
-             #  headers: %w[Authorization],
-             expose: %w[access-token expiry token-type Authorization],
-             methods: %i[get post put patch delete options head]
+    origins 'https://car-shop-client-production.vercel.app' # Your frontend URL
+    resource '*', headers: :any, methods: [:get, :post, :patch, :delete, :options]
   end
 end
