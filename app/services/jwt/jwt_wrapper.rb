@@ -1,4 +1,4 @@
-class JWTWrapper
+class Jwt::JWTWrapper
   def self.decode(token)
     secret_key = Rails.application.credentials.jwt.secret
     # secret_key = ENV.fetch("JWT_SECRET")
