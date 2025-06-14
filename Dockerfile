@@ -21,4 +21,4 @@ EXPOSE 3000
 ENV RAILS_ENV=production
 
 # Ejecuta las migraciones y precompila assets en Railway
-CMD ["bash", "-c", "bundle exec rails db:migrate && bundle exec rails assets:precompile && bundle exec rails s"]
+CMD ["bash", "-c", "bundle exec rails db:create && bundle exec rails db:migrate && bundle exec rails assets:precompile && bundle exec rails s"]
