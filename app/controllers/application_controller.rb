@@ -1,7 +1,7 @@
 require Rails.root.join('app/services/jwt/jwt_wrapper')
-before_action :set_cors_headers
 
 class ApplicationController < ActionController::API
+  before_action :set_cors_headers
   respond_to :json
 
   private
