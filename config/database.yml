@@ -21,11 +21,11 @@ default: &default
 
 development:
   <<: *default
-  database: car_shop_api_development
-  username: <%= Rails.application.credentials.dig(:development, :database, :username) %>
-  password: <%= Rails.application.credentials.dig(:development, :database, :password) %>
-  host: <%= Rails.application.credentials.dig(:development, :database, :host) %>
-  port: <%= Rails.application.credentials.dig(:development, :database, :port) %>
+  database: railway
+  username: postgres
+  password: ycPqibhSGFqjukdglqFAaNucarNfhRdV
+  host: metro.proxy.rlwy.net
+  port: 26728
 
   # The specified database role being used to connect to PostgreSQL.
   # To create.rb additional roles in PostgreSQL see `$ createuser --help`.
