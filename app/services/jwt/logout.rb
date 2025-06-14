@@ -3,7 +3,7 @@ class Jwt::Logout
 
   def initialize(params)
     @jwt_token = params[:jwt_token]
-    @jwt_payload = Jwt::JWTWrapper.decode(jwt_token)
+    @jwt_payload = JwtWrapper.decode(jwt_token)
   end
 
   def handle
