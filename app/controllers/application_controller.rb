@@ -57,7 +57,7 @@ class ApplicationController < ActionController::API
 
   def decoded_jwt_token
     token = request.headers['Authorization']&.split&.last
-    JwtWrapper.decode(token) if token
+    Jwt::JwtWrapper.decode(token) if token
   end
 
   def render_response(obj)
