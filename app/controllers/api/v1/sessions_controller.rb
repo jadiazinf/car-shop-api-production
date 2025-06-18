@@ -2,14 +2,14 @@ class Api::V1::SessionsController < Devise::SessionsController
   before_action :authenticate_user!, unless: :devise_controller?
   respond_to :json
 
-  def create
-    UsersActivitiesLogs::Create.new(current_user, 'Create user session').perform
-    self.resource = warden.authenticate!(auth_options)
-    set_flash_message!(:notice, :signed_in)
-    sign_in(resource_name, resource)
-    yield resource if block_given?
-    respond_with resource
-  end
+  # def create
+  #   UsersActivitiesLogs::Create.new(current_user, 'Create user session').perform
+  #   self.resource = warden.authenticate!(auth_options)
+  #   set_flash_message!(:notice, :signed_in)
+  #   sign_in(resource_name, resource)
+  #   yield resource if block_given?
+  #   respond_with resource
+  # end
 
   protected
 
@@ -19,7 +19,7 @@ class Api::V1::SessionsController < Devise::SessionsController
     if auth_result.first == false
       render_unauthorized(auth_result[1])
     else
-      configure_header
+      # configure_header
       render_success_response({ user: auth_result[1] })
     end
   rescue StandardError
