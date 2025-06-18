@@ -22,15 +22,15 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def authenticate_user!
-    if request.headers['Authorization'].present?
-      jwt_payload = decoded_jwt_token
-      validate_token(jwt_payload)
-    else
-      render json: { error: I18n.t('active_record.auth.errors.jwt_not_found_in_header') },
-             status: :unauthorized
-    end
-  end
+  # def authenticate_user!
+  #   if request.headers['Authorization'].present?
+  #     jwt_payload = decoded_jwt_token
+  #     validate_token(jwt_payload)
+  #   else
+  #     render json: { error: I18n.t('active_record.auth.errors.jwt_not_found_in_header') },
+  #            status: :unauthorized
+  #   end
+  # end
 
   def authorize_admin!
     user_roles = current_user.roles(params[:company_id])
