@@ -60,9 +60,9 @@ class ApplicationController < ActionController::API
     render_forbidden
   end
 
-  def current_user
-    @current_user ||= User.find_by(id: decoded_jwt_token['sub']) if decoded_jwt_token
-  end
+  # def current_user
+  #   @current_user ||= User.find_by(id: decoded_jwt_token['sub']) if decoded_jwt_token
+  # end
 
   def decoded_jwt_token
     token = request.headers['Authorization']&.split&.last
