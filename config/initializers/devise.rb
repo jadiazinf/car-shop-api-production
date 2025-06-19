@@ -316,7 +316,7 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
   config.jwt do |jwt|
     # jwt.secret = ENV['JWT_SECRET_KEY']
-    jwt.secret = ENV.fetch('DEVISE_JWT_SECRET_KEY')
+    jwt.secret = ENV['DEVISE_JWT_SECRET_KEY'] || raise("Missing DEVISE_JWT_SECRET_KEY in environment")
     jwt.dispatch_requests = [
       ['POST', %r{^/login$}]
     ]

@@ -1,7 +1,7 @@
 module Jwt
   class JwtWrapper
     def self.decode(token)
-      secret_key = ENV.fetch('DEVISE_JWT_SECRET_KEY')
+      secret_key = jwt.secret = ENV['DEVISE_JWT_SECRET_KEY'] || raise("Missing DEVISE_JWT_SECRET_KEY in environment")
 
       begin
         decoded_token = JWT.decode(token, secret_key, true, algorithm: 'HS256')
