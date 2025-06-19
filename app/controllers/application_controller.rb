@@ -1,4 +1,4 @@
-require Rails.root.join('app/services/jwt/jwt_wrapper')
+# require Rails.root.join('app/services/jwt/jwt_wrapper')
 
 class ApplicationController < ActionController::API
   before_action :set_cors_headers
@@ -22,15 +22,15 @@ class ApplicationController < ActionController::API
     end
   end
 
-  # def authenticate_user!
-  #   if request.headers['Authorization'].present?
-  #     jwt_payload = decoded_jwt_token
-  #     validate_token(jwt_payload)
-  #   else
-  #     render json: { error: I18n.t('active_record.auth.errors.jwt_not_found_in_header') },
-  #            status: :unauthorized
-  #   end
-  # end
+  def authenticate_user!
+    if request.headers['Authorization'].present?
+      jwt_payload = decoded_jwt_token
+      validate_token(jwt_payload)
+    else
+      render json: { error: I18n.t('active_record.auth.errors.jwt_not_found_in_header') },
+             status: :unauthorized
+    end
+  end
 
   def authorize_admin!
     user_roles = current_user.roles(params[:company_id])
@@ -60,9 +60,9 @@ class ApplicationController < ActionController::API
     render_forbidden
   end
 
-  # def current_user
-  #   @current_user ||= User.find_by(id: decoded_jwt_token['sub']) if decoded_jwt_token
-  # end
+  def current_user
+    @current_user ||= User.find_by(id: decoded_jwt_token['sub']) if decoded_jwt_token
+  end
 
   def decoded_jwt_token
     token = request.headers['Authorization']&.split&.last
