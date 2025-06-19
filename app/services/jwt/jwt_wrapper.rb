@@ -11,7 +11,7 @@ module Jwt
 
       # secret_key = ENV['JWT_SECRET_KEY']
 
-      secret_key = Rails.application.credentials.jwt.secret
+      secret_key = Rails.application.credentials[:jwt]&.fetch(:secret)
 
       begin
         decoded_token = JWT.decode(token, secret_key, true, algorithm: 'HS256')

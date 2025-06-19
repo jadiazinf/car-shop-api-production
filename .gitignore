@@ -30,7 +30,7 @@
 !/tmp/storage/.keep
 
 # Ignore master key for decrypting credentials and more.
-/config/master.key
+# /config/master.key
 node_modules
 credentials
 
@@ -40,4 +40,4 @@ credentials
 
 .vscode
 
-credentials.yml.enc
+# credentials.yml.enc
