@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_24_160508) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_24_193500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -277,8 +277,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_160508) do
     t.datetime "updated_at", null: false
     t.bigint "model_id"
     t.bigint "user_id"
-    t.index ["body_serial"], name: "unique_body_serial", unique: true
-    t.index ["engine_serial"], name: "unique_engine_serial", unique: true
+    t.index ["body_serial"], name: "index_vehicles_on_body_serial"
+    t.index ["engine_serial"], name: "index_vehicles_on_engine_serial"
     t.index ["license_plate"], name: "unique_license_plate", unique: true
     t.index ["model_id"], name: "index_vehicles_on_model_id"
     t.index ["user_id"], name: "index_vehicles_on_user_id"
