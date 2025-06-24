@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_03_10_171405) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_24_160508) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "unaccent"
@@ -265,10 +265,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_03_10_171405) do
     t.integer "tires", null: false
     t.string "color", default: "", null: false
     t.string "vehicle_type", default: "", null: false
-    t.integer "load_capacity", default: 0, null: false
+    t.integer "load_capacity", default: 0
     t.bigint "mileage", default: 1, null: false
-    t.string "engine_serial", default: "", null: false
-    t.string "body_serial", default: "", null: false
+    t.string "engine_serial", default: ""
+    t.string "body_serial", default: ""
     t.string "license_plate", default: "", null: false
     t.string "engine_type", default: "", null: false
     t.string "transmission", default: "", null: false
