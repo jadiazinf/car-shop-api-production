@@ -18,14 +18,13 @@ class Vehicle < ApplicationRecord
 
   validates :vehicle_type, :engine_type,
             presence: { message: I18n.t("#{ERRORS_KEY}.blank") }
-  validates :load_capacity, presence: { message: I18n.t("#{ERRORS_KEY}.blank") },
-                            numericality: { only_integer: true,
-                                            message: I18n.t("#{ERRORS_KEY}.format") }
+  validates :load_capacity, numericality: { only_integer: true,
+                                          message: I18n.t("#{ERRORS_KEY}.format") }
   validates :mileage, presence: { message: I18n.t("#{ERRORS_KEY}.blank") },
                       numericality: { only_integer: true,
                                       message: I18n.t("#{ERRORS_KEY}.format") }
 
-  validates :license_plate, :engine_serial, :body_serial,
+  validates :license_plate,
             presence: { message: I18n.t("#{ERRORS_KEY}.blank") },
             uniqueness: { message: I18n.t("#{ERRORS_KEY}.taken") }
 
