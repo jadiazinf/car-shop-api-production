@@ -21,7 +21,10 @@ class UsersCompaniesRequests::GetByCompany
   private
 
   def base_scope
-    UserCompanyRequest.includes(user_company: %i[user company]).where(user_company: { company_id: })
+    UserCompanyRequest
+      .includes(user_company: %i[user company])
+      .where(user_company: { company_id: })
+      .order(created_at: :desc)
   end
 
   def filter_by_name(requests)

@@ -20,7 +20,7 @@ class UsersCompaniesRequests::GetAll
   private
 
   def base_scope
-    UserCompanyRequest.includes(user_company: %i[user company])
+    UserCompanyRequest.includes(user_company: %i[user company]).order(created_at: :desc)
   end
 
   def filter_by_name(requests)
