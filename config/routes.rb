@@ -120,6 +120,7 @@ Rails.application.routes.draw do
 
       resources :notifications do
         get :unread_notifications, on: :collection
+        post :read_notification, on: :member
       end
 
       namespace :super_admin do
